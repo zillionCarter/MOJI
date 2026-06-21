@@ -1,0 +1,1055 @@
+/* 1. The Scrollbar Track (the background of the bar) */
+::-webkit-scrollbar {
+    width: 8px; /* Makes it thin and discrete */
+}
+
+/* 2. The Background of the scrollbar (Matches your site background) */
+::-webkit-scrollbar-track {
+    background: #000000; 
+}
+
+/* 3. The Handle (The part you actually move) */
+::-webkit-scrollbar-thumb {
+    background: #333333; /* Dark grey so it's barely visible */
+    border-radius: 10px;
+    border: 2px solid #000000; /* Adds "padding" around the handle */
+}
+
+/* 4. Handle on Hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #ffffff; /* Turns white when you touch it to match your brand */
+}
+
+/* Firefox Support */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #333333 #000000;
+}
+
+
+:root {
+    --bg-color: #000000;
+    --text-color: #ffffff;
+    --accent-color: #ffffff;
+    --secondary-bg: #111111;
+    --border-color: #333333;
+    --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --transition: all 0.3s ease;
+    
+    /* Fluid Spacing & Typography */
+    --space-xs: clamp(0.75rem, 0.7rem + 0.25vw, 1rem);
+    --space-s: clamp(1rem, 0.9rem + 0.5vw, 1.5rem);
+    --space-m: clamp(1.5rem, 1.3rem + 1vw, 2.5rem);
+    --space-l: clamp(2.5rem, 2.2rem + 1.5vw, 4rem);
+    --space-xl: clamp(4rem, 3.5rem + 2.5vw, 6.5rem);
+    
+    --font-size-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    --font-size-h1: clamp(2.5rem, 1.5rem + 5vw, 5rem);
+    --font-size-h2: clamp(2rem, 1.5rem + 2.5vw, 3rem);
+    --font-size-h3: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-main);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Typography */
+h1 {
+    font-size: var(--font-size-h1);
+}
+
+h2 {
+    font-size: var(--font-size-h2);
+}
+
+h3 {
+    font-size: var(--font-size-h3);
+}
+
+h1, h2, h3 {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 900;
+}
+
+a {
+    color: var(--text-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+a:hover {
+    color: var(--accent-color);
+}
+
+/* Navigation */
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    /* REDUCED PADDING: Changed from --space-s to 0.5rem for a tighter look */
+    padding: 0.5rem var(--space-m); 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    background: rgba(0,0,0,0.9); /* Slightly more opaque for the B&W brand */
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    flex-wrap: nowrap; /* Changed to nowrap to prevent stacking issues on thin bars */
+}
+
+.logo img {
+    /* REDUCED HEIGHT: Dropped from 2.5rem to 1.8rem to shrink the bar's height */
+    height: 3rem; 
+    display: block;
+    width: auto;
+}
+
+.nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.nav-links {
+    display: flex;
+    gap: var(--space-s);
+    align-items: center;
+}
+
+.nav-links a {
+    font-size: 0.85rem; /* Slightly smaller font to match the thinner bar */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+}
+
+.btn-nav {
+    padding: 6px 12px;
+    border: 1px solid var(--text-color);
+    font-size: 0.8rem;
+    margin: 0;
+    line-height: 1;
+    display: inline-block;
+    /* ADJUSTED TRANSFORM: Since the bar is now thinner, 
+       you might need -10px instead of -15px to keep it centered. */
+    transform: translateY(-16px); 
+}
+
+
+
+.hero-video-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1; /* Keeps it behind the content */
+    
+    /* Matches your original 'dimmer switch' setting */
+    filter: brightness(50%); 
+}
+
+/* Ensure the hero container is set up for absolute positioning */
+.hero {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: transparent; 
+}
+
+.hero-content {
+    position: relative; /* Ensures it sits on top of the bg */
+    text-align: center;
+    z-index: 10;
+    color: #fff;
+}
+
+.hero-content h1 {
+    margin-bottom: var(--space-s);
+    color: #fff;
+    /* White glow for grayscale aesthetic */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    letter-spacing: 8px;
+}
+
+.hero-logo {
+    max-width: 600px;
+    width: 100%;
+    height: auto;
+    margin-bottom: var(--space-s);
+}
+.hero-content p {
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    border: 2px solid var(--accent-color);
+    background: transparent;
+    color: var(--text-color);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 30px;
+}
+
+.btn:hover {
+    background: var(--accent-color);
+    color: var(--bg-color);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+/* Sections */
+section {
+    padding: var(--space-m) var(--space-m);
+}
+
+.section-title {
+    margin-bottom: var(--space-s);
+    border-left: 3px solid var(--accent-color);
+    padding-left: var(--space-s);
+    font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+}
+
+
+
+
+/* --- THE ARTIST GRID (Left to Right, Top-Aligned) --- */
+.artist-list {
+    display: grid;
+    /* Forces cards to stay between 300px and 400px so they don't grow too wide */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 400px));
+    /* Forces the grid to the top and prevents rows from stretching vertically */
+    grid-template-rows: max-content; 
+    align-content: start; 
+    
+    gap: 20px;
+    width: 100%;
+    max-width: 2500px;
+    margin: 10px 0; /* Reduced top margin to bring it closer to the header */
+    padding: 0 20px;
+}
+
+.artist-item {
+    display: flex;
+    align-items: center;
+    background: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    gap: 20px;
+    border-radius: 12px;
+    transition: var(--transition);
+    
+    /* This ensures the card doesn't stretch vertically if the row is tall */
+    align-self: start; 
+    height: 110px; /* Fixed height keeps them identical even if one bio is longer */
+}
+
+.artist-item:hover {
+    border-color: var(--accent-color);
+    background: #222;
+}
+
+.artist-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.artist-item-info {
+    flex-grow: 1;
+    overflow: hidden; /* Prevents long text from breaking the card */
+}
+
+.artist-item-info h3 {
+    margin-bottom: 2px;
+    font-size: 1.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Adds "..." if name is too long */
+}
+
+.artist-item-info p {
+    color: #888;
+    font-size: 0.85rem;
+    line-height: 1.2;
+}
+
+/* Keeps social icons in a single horizontal row */
+.artist-item-socials {
+    display: flex; 
+    flex-direction: row; /* Forces left-to-right */
+    gap: 12px;           /* Space between icons */
+    align-items: center;
+    margin-left: 10px;   /* Pushes them slightly away from the text */
+    flex-wrap: nowrap;   /* Prevents them from dropping to a new line */
+}
+
+.artist-item-socials a {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    transition: var(--transition);
+}
+
+.artist-item-socials a:hover {
+    color: var(--accent-color);
+    transform: scale(1.1);
+}
+
+
+
+/* Forms */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 12px;
+    background: #0a0a0a;
+    border: 1px solid var(--border-color);
+    color: white;
+    font-family: inherit;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+/* Footer */
+footer {
+    padding: 50px;
+    background: var(--secondary-bg);
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.socials {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.socials a {
+    font-size: 1.5rem;
+}
+
+.spotify-container {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin-bottom: var(--space-m);
+}
+
+.spotify-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+
+img, gif {
+    object-fit: cover;
+}
+
+
+.spotify-mini-container {
+    width: 100%;
+    height: 45px;       /* Increased slightly so nothing is cut off */
+    overflow: visible;  /* Change this to visible to test if the wall disappears */
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.spotify-mini-container iframe {
+    /* To make it look 1/10th size but visible, we use a smaller scale */
+    transform: scale(0.5); 
+    transform-origin: left center;
+    
+    /* THE TRICK: Make the width 200% so when it scales by 0.5, 
+       it fits 100% of your card width */
+    width: 200% !important; 
+    min-width: 200%;
+    height: 80px;
+    border: none;
+}
+
+#release-container, #artist-container {
+    min-height: 400px; /* Reserves space so the page doesn't "jump" when data arrives */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- THE FLUID GRID --- */
+.release-grid {
+    display: grid;
+    /* Larger minimum column width so each tile is wide enough for the embed */
+    grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+    gap: 30px;
+    width: 50%;
+    max-width: 1600px; /* Allow more room on wide monitors */
+    margin: 40px auto; /* Centers the whole grid */
+    padding: 0 40px;   /* Extra horizontal padding so embed never touches card edge */
+}
+
+/* --- THE ADAPTIVE CARD --- */
+.card {
+    background: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    padding: 15px;     /* Slightly tighter padding for better fit */
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: var(--transition);
+}
+
+/* --- THE IMAGE (Always a Square, Always fits) --- */
+.image-wrapper {
+    width: 100%;
+    position: relative;
+    padding-top: 100%; /* This is a pro-trick to keep a 1:1 aspect ratio */
+    margin-bottom: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.image-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Keeps artwork centered and cropped perfectly */
+}
+
+.card-text {
+    flex-grow: 1;
+}
+
+/* Small screens fix: If the screen is very tiny, allow the grid to shrink */
+@media (max-width: 350px) {
+    .release-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+//* --- RELEASE CARD FIX --- */
+.release-grid .card {
+    background: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    /* Let cards size to fit content so embeds are never cut; keeps layout stable on desktop */
+    height: auto;
+    min-height: 100%; /* Ensures alignment across the grid */
+    overflow: visible;
+    transition: var(--transition);
+}
+
+/* Show the spotify/soundcloud player on desktop - give more height to ensure full visibility */
+.release-grid .card iframe {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 4; /* Fluidly scales embed based on card width */
+    min-height: 80px;     /* Minimum size to keep controls visible */
+    max-height: 152px;    /* Max compact Spotify height */
+    margin-top: 10px;
+    border-radius: 12px;
+    flex-shrink: 0;
+    border: none;
+}
+
+/* Constrain card text to prevent height variations */
+.release-grid .card-text {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 0;
+}
+
+.release-grid .card-text h3 {
+    margin: 0 0 4px 0;
+    font-size: 1.1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    max-height: 2.4em;
+}
+
+.release-grid .card-text p {
+    margin: 0;
+    font-size: 0.85rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    max-height: 2.4em;
+}
+
+/* Ensure images don't vanish */
+.image-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    flex-shrink: 0; /* Stops the image from getting squished */
+}
+
+.image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-text h3 {
+    margin: 0 0 5px 0;
+    font-size: 1.2rem;
+}
+
+.card-text p {
+    font-size: 0.9rem;
+    color: #bbb;
+    margin-bottom: 15px;
+}
+
+/* --- 1. THE SECTION SETUP --- */
+.full-screen-section {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Keeps the grid centered */
+    justify-content: flex-start;
+    padding-top: 100px; /* Room for the main site Navigation */
+    box-sizing: border-box;
+    overflow: hidden;
+    scroll-snap-align: start;
+}
+
+/* --- 2. THE SECTION HEADER (The Title Holder) --- */
+.section-header {
+    width: 100%;
+    max-width: 1400px;
+    display: flex;
+    /* Pushes content to the RIGHT */
+    justify-content: flex-end; 
+    padding-right: 50px;
+    margin-bottom: 20px; /* Space between title and releases */
+    flex-shrink: 0;
+}
+
+.section-title {
+    margin: 0;
+    font-size: clamp(1.8rem, 4vh, 3.5rem);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--accent-color);
+}
+
+/* --- 3. THE SCALED CONTENT BOX --- */
+.section-content {
+    width: 100%;
+    max-width: 1400px;
+    /* This ensures the grid fills the remaining screen but doesn't overlap title */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    
+    /* Zooms the content out to fit the screen */
+    transform: scale(var(--scale-factor, 0.9));
+    transform-origin: top center;
+}
+
+/* --- THE RELEASE GRID --- */
+.release-grid {
+    display: grid;
+    /* Keeps your perfect auto-scaling tiles */
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 30px;
+    padding: 40px;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+/* --- THE ADAPTIVE CARD --- */
+.release-grid .card {
+    background: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    height: auto; 
+    min-height: 100%; 
+    overflow: hidden; 
+    transition: var(--transition);
+}
+
+/* --- THE SPOTIFY EMBED --- */
+.release-grid .card iframe {
+    display: block;
+    width: 100%;
+    
+    /* Set to 215px so it's tall enough to show your tracks completely */
+    height: 215px; 
+    min-height: 215px; 
+    
+    margin-top: 1px;
+    border: none;
+    border-radius: 8px;
+    flex-shrink: 0;
+
+    /* Slices off the bottom 15px where the buggy white scrollbar renders */
+    clip-path: inset(0 0 15px 0);
+    margin-bottom: -15px; 
+}
+
+/* --- SPECIFIC PC / DESKTOP BREAKPOINT FIX --- */
+/* If the screen width drops under 1237px OR the height drops under 653px, 
+   only the Spotify player disappears. Everything else remains on the PC layout. */
+@media screen and (max-width: 1237px), screen and (max-height: 653px) {
+    .release-grid .card iframe {
+        display: none !important;
+    }
+}
+
+/* --- DYNAMIC SCALING --- */
+@media (max-height: 850px) {
+    .section-content { --scale-factor: 0.8; }
+}
+@media (max-height: 700px) {
+    .section-content { --scale-factor: 0.7; }
+}
+
+/* --- THE GRID FIX --- */
+.events-grid, .release-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(560px, 1fr)); 
+    gap: 30px;
+    width: 100%;
+    max-width: 1800px;
+    margin: 0 auto;
+    justify-content: center; /* Keeps the single card centered in the page */
+}
+
+/* --- THE CARD FIX --- */
+.card {
+    background: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    
+    /* This is the secret: it keeps the card a normal size 
+       even if the grid is empty otherwise */
+    max-width: 400px; 
+    width: 100%;
+    
+    /* Ensures the card doesn't look weird if it's the only one */
+    margin: 0 auto; 
+}
+
+/* Release cards need to be allowed to fill their grid column so embeds don't get squeezed */
+.release-grid .card {
+    max-width: none !important;
+    width: 100% !important;
+}
+
+/* Ensure iframes inside cards can't force overflow horizontally */
+.release-grid .card iframe {
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* Ensure images stay proportional inside the fixed-size card */
+.image-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1; 
+    overflow: hidden;
+}
+
+.image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* The new Date Block */
+.date-box {
+    width: 100%;
+    aspect-ratio: 16 / 9; /* Keeps a nice rectangular shape */
+    background: linear-gradient(45deg, #111, #222); /* Dark sleek look */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 2px solid var(--accent-color);
+    text-transform: uppercase;
+}
+
+.date-day {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--accent-color); /* Your site's main color */
+}
+
+.date-month {
+    font-size: 1.2rem;
+    letter-spacing: 4px;
+    margin-top: 5px;
+}
+
+.date-year {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Ensure the card content still looks good */
+.event-card .card-content {
+    padding: 20px;
+    text-align: center;
+}
+
+/* The Big Date Box */
+.event-date-container {
+    width: 100%;
+    background: #000; /* Solid black background */
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 3px solid var(--accent-color);
+    box-sizing: border-box;
+}
+
+.date-main {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+/* The Month (JAN) */
+.date-main .m {
+    font-size: 2.5rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+    color: #fff;
+}
+
+/* The Day (12) */
+.date-main .d {
+    font-size: 4.5rem;
+    font-weight: 900;
+    color: var(--accent-color);
+    line-height: 0.8;
+}
+
+/* The Year (2026) */
+.date-year {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #444; /* Darker grey so it doesn't distract from the day/month */
+    letter-spacing: 8px;
+    margin-top: 10px;
+    text-indent: 8px; /* Centers the letter spacing */
+}
+
+/* Card Text Styling */
+.event-card .card-text h3 {
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.event-card .location {
+    font-size: 0.85rem;
+    color: #888;
+    letter-spacing: 1px;
+}
+
+.weekly-fix {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.weekly-fix .m {
+    color: #fff !important; /* Keep days white */
+}
+
+.weekly-fix .d {
+    color: var(--accent-color) !important; /* Keep the '&' in accent color */
+}
+
+/* Ensure iframe is visible on Desktop */
+.card iframe {
+    display: block;
+    width: 100%;
+    border-radius: 12px;
+}
+
+/* Desktop Grid: Keep each tile wide enough for the Spotify embed */
+.release-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(560px, 1fr));
+    gap: 30px;
+    align-items: start;
+    max-width: 1800px;
+    margin: 0 auto;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    height: auto; /* allow cards to expand to fit the full player */
+}
+
+
+@media (max-width: 768px) {
+    /* 1. Nav: Mobile side drawer */
+    .nav-toggle {
+        display: block !important;
+        position: relative;
+        z-index: 1101 !important;
+        color: var(--text-color);
+        background: transparent;
+        border: none;
+        font-size: 1.5rem;
+        padding: 8px !important;
+        cursor: pointer;
+    }
+
+    nav {
+        justify-content: space-between !important;
+        padding: 0.5rem 1rem !important;
+    }
+
+    .nav-links {
+        position: fixed !important;
+        top: 0 !important;
+        right: -100% !important;
+        width: min(280px, 80%) !important;
+        height: 100vh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 16px !important;
+        padding: 80px 20px 20px !important;
+        background: rgba(0, 0, 0, 0.98) !important;
+        border-left: 1px solid var(--border-color) !important;
+        transition: right 0.3s ease !important;
+        z-index: 1050 !important;
+        overflow-y: auto !important;
+        justify-content: flex-start !important;
+        align-items: flex-start !important;
+    }
+
+    .nav-links.active {
+        right: 0 !important;
+    }
+
+    .nav-links a {
+        font-size: 0.95rem !important;
+        letter-spacing: 0.5px !important;
+        width: 100% !important;
+        padding: 12px 16px !important;
+        border-radius: 10px !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+    }
+
+    .btn-nav {
+        order: 3; /* Keeps Submit Demo in the middle */
+        transform: none !important;
+        margin: 0 !important;
+        padding: 10px 14px !important;
+        display: block !important;
+        width: 100% !important;
+        text-align: center !important;
+        border: 1px solid #fff !important;
+        font-size: 0.85rem !important;
+    }
+
+    .logo {
+        display: block !important;
+    }
+
+    /* 2. Grid: Exactly 2 per row (Releases Page) */
+    .release-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 15px !important;
+        padding: 15px !important;
+        align-items: start !important;
+    }
+
+    /* 3. The Card: Uniform & Responsive */
+    .card {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        background: var(--secondary-bg) !important;
+        border: 1px solid var(--border-color) !important;
+        padding: 15px !important;
+        border-radius: 12px !important;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: visible !important;
+    }
+
+    .image-wrapper {
+        width: 100% !important;
+        aspect-ratio: 1 / 1 !important;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        flex-shrink: 0 !important;
+    }
+
+    .image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* 4. Text: Scaled to fit 2-column layout */
+    .card-text h3 {
+        font-size: clamp(0.8rem, 2.5vw, 1rem) !important;
+        line-height: 1.2;
+        white-space: normal !important;
+        word-wrap: break-word;
+        margin: 0 0 4px 0 !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        display: block !important;
+        -webkit-line-clamp: unset !important;
+        max-height: none !important;
+    }
+
+    .card-text p {
+        font-size: clamp(0.7rem, 2vw, 0.8rem) !important;
+        color: #888;
+        margin: 0 !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        display: block !important;
+        -webkit-line-clamp: unset !important;
+        max-height: none !important;
+    }
+
+    /* 5. Hide Player on Mobile */
+    .card iframe {
+        display: none !important;
+    }
+
+    /* 6. Home Page Fix: Stacking Squashed Sections */
+    /* Target the container that holds New Release & Next Event */
+    .home-sections, .split-section, .hero-features {
+        display: flex !important;
+        flex-direction: column !important; /* Forces vertical stacking */
+        gap: 30px !important;
+        padding: 0 15px !important;
+    }
+
+    .home-section-box, .feature-box {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+    }
+}
+@media (max-width: 768px) {
+    /* ... keep sections 1-5 as they were ... */
+
+    /* 6. Home Page Fix: Forces #home-updates to stack */
+    #home-updates, .home-sections, .split-section {
+        display: flex !important;
+        flex-direction: column !important; /* Forces vertical stacking */
+        gap: 40px !important; /* Space between the two sections */
+        padding: 20px !important;
+    }
+
+    /* Make sure the boxes inside expand to the full screen width */
+    #home-updates > div, 
+    .home-section-box, 
+    .new-release-highlight, 
+    .next-event-highlight {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 0 20px 0 !important;
+    }
+}
+
+@media (max-width: 768px) {
+    /* ... existing nav/grid code ... */
+
+    /* Landing Section: Forces it to take up the full phone screen */
+    #hero, .landing-section, #home-landing {
+        min-height: 100vh !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Hide the player ONLY on mobile */
+    .card iframe {
+        display: none !important;
+    }
+}
