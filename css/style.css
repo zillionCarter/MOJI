@@ -821,6 +821,54 @@ img, gif {
     letter-spacing: 1px;
 }
 
+/* Event Image (from ImageURL / column E) */
+/* Sits as a banner between the date box and the event details.
+   Shows the WHOLE image (square or portrait) without cropping.
+   The tile itself grows to fit the image + text + button so
+   everything is always fully visible on every screen size. */
+.event-card .event-image {
+    width: 100%;
+    background: #000;         /* fills any letterbox space around the image */
+    overflow: hidden;
+    border-bottom: 2px solid var(--accent-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.event-card .event-image img {
+    width: 70%;               /* scaled down so the image sits neatly in the tile */
+    height: auto;             /* keeps the image's natural aspect ratio */
+    object-fit: contain;      /* shows the entire image, nothing cut off */
+    display: block;
+    margin: 0 auto;           /* centres the scaled image */
+}
+
+/* An event tile with an image sizes itself to its content and never
+   stretches to match neighbours, so the picture, text and button
+   are always shown in full. */
+.event-card {
+    height: auto;
+    align-self: start;
+}
+
+/* Spotify playlist embed on the Label / Releases page */
+.playlist-embed {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+
+.playlist-embed iframe {
+    display: block;
+    width: 100%;
+    height: 70vh;             /* fills most of the screen height */
+    min-height: 500px;
+    border-radius: 12px;
+}
+
 .weekly-fix {
     display: flex;
     align-items: center;
@@ -936,6 +984,20 @@ img, gif {
         gap: 15px !important;
         padding: 15px !important;
         align-items: start !important;
+    }
+
+    /* Events Grid: single column on mobile so tiles never get cropped */
+    .events-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+        padding: 15px !important;
+        align-items: start !important;
+    }
+
+    /* Event tile fills the screen width neatly on mobile */
+    .events-grid .card {
+        max-width: 100% !important;
     }
 
     /* 3. The Card: Uniform & Responsive */

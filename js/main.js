@@ -430,6 +430,18 @@ if (path.includes('label')) {
 
 
 
+                const imageUrl = row[4] ? row[4].trim() : '';
+
+                const imageHtml = imageUrl ? `
+
+                    <div class="event-image">
+
+                        <img src="${imageUrl}" alt="${row[0]}">
+
+                    </div>` : '';
+
+
+
                 return `
 
                 <div class="card event-card">
@@ -439,6 +451,8 @@ if (path.includes('label')) {
                         ${dateHtml}
 
                     </div>
+
+                    ${imageHtml}
 
                     <div class="card-text">
 

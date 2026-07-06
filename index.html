@@ -31,9 +31,8 @@
     </nav>
 
     <header class="hero">
-        <video autoplay muted loop playsinline class="hero-video-bg" id="heroVideo">
+        <video autoplay muted loop playsinline class="hero-video-bg" id="heroVideo" preload="auto">
             <source src="video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
         </video> 
         
         <div class="hero-content">
@@ -65,21 +64,23 @@
     <script>
         const video = document.getElementById('heroVideo');
 
-        // Try to trigger video playback automatically on load
+        // Test if video autoplay works out of the box
         video.play().catch(error => {
-            console.log("Autoplay restricted by battery-saving protocols. Ready for interaction.");
-            
-            // Forces playback instantly as soon as the user touches, clicks, or scrolls anywhere on screen
-            const forcePlay = () => {
-                video.play();
-                window.removeEventListener('click', forcePlay);
-                window.removeEventListener('touchstart', forcePlay);
-                window.removeEventListener('scroll', forcePlay);
-            };
-
-            window.addEventListener('click', forcePlay);
-            window.addEventListener('touchstart', forcePlay);
-            window.addEventListener('scroll', forcePlay);
+            // Check specifically for user engine blocks (Low Power Mode)
+            if (error.name === 'NotAllowedError' || error.name === 'AbortError') {
+                console.log("Low power configuration active. Deploying silent looping asset.");
+                
+                // Build an image fallback pointing directly to your new custom loop
+                const fallbackImg = document.createElement('img');
+                fallbackImg.src = 'css/video_fallback.gif'; 
+                
+                // Keep classes and positions inline
+                fallbackImg.className = video.className;
+                fallbackImg.style.cssText = video.style.cssText;
+                
+                // Swap the layout blocks immediately
+                video.parentNode.replaceChild(fallbackImg, video);
+            }
         });
     </script>
 </body>
