@@ -1,0 +1,14 @@
+node_modules
+.git
+.github
+.claude
+.netlify
+.wrangler
+__pycache__
+*.py
+wrangler.jsonc
+package.json
+package-lock.json
+.gitignore
+.gitattributes
+README.md
