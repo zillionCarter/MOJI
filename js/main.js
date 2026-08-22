@@ -397,7 +397,10 @@ if (path.includes('label')) {
                 // Use white-label Megatix URLs where we have a confirmed slug.
                 // Falls back to the original ticket link (from the sheet) otherwise.
                 const WHITE_LABEL_SLUGS = {
-                    'unchained bali - bonka': 'unchained-bali-bonka'
+                    'unchained bali - bonka': 'unchained-bali-bonka',
+                    'terminus': 'terminus-bali',
+                    'unchained jakarta': 'unchained-jakarta',
+                    'ship faced - bali boat rave': 'unchained-pres-ship-faced-bali-boat-rave'
                 };
                 const knownSlug = WHITE_LABEL_SLUGS[title.trim().toLowerCase()];
                 if (!isPast && knownSlug) {
