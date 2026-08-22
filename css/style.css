@@ -83,6 +83,18 @@ h1, h2, h3 {
     font-weight: 900;
 }
 
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 a {
     color: var(--text-color);
     text-decoration: none;
@@ -110,9 +122,13 @@ nav {
     flex-wrap: nowrap; /* Changed to nowrap to prevent stacking issues on thin bars */
 }
 
+.logo {
+    display: flex;
+    align-items: center;
+}
+
 .logo img {
-    /* REDUCED HEIGHT: Dropped from 2.5rem to 1.8rem to shrink the bar's height */
-    height: 3rem; 
+    height: 3.4rem;
     display: block;
     width: auto;
 }
@@ -186,12 +202,15 @@ nav {
     color: #fff;
 }
 
-.hero-content h1 {
+.hero-content h1,
+.hero-content h2 {
     margin-bottom: var(--space-s);
     color: #fff;
-    /* White glow for grayscale aesthetic */
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    letter-spacing: 8px;
+    font-size: clamp(0.95rem, 0.8rem + 1.2vw, 1.4rem);
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95), 0 4px 24px rgba(0, 0, 0, 0.9);
 }
 
 .hero-logo {
@@ -199,11 +218,6 @@ nav {
     width: 100%;
     height: auto;
     margin-bottom: var(--space-s);
-}
-.hero-content p {
-    font-size: 1.2rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
 }
 
 /* Buttons */
@@ -672,9 +686,9 @@ img, gif {
 }
 
 /* --- THE GRID FIX --- */
-.events-grid, .release-grid {
+.release-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(560px, 1fr)); 
+    grid-template-columns: repeat(auto-fit, minmax(560px, 1fr));
     gap: 30px;
     width: 100%;
     max-width: 1800px;
@@ -757,99 +771,267 @@ img, gif {
     margin-top: 5px;
 }
 
-/* Ensure the card content still looks good */
-.event-card .card-content {
-    padding: 20px;
-    text-align: center;
+/* ============================================================
+   EVENTS GRID
+   Poster-first tiles. Every tile is exactly the same height in a
+   row: the artwork is a fixed 4:5 crop, the title/location are
+   line-clamped, and the ticket button is pinned to the bottom.
+   4 per row on desktop, 3 on laptop, 2 from tablet down to phone.
+   ============================================================ */
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(14px, 1.4vw, 28px);
+    width: 100%;
+    max-width: 1800px;
+    margin: 0 auto;
+    align-items: stretch;
 }
 
-/* The Big Date Box */
-.event-date-container {
+/* Breathing room between the section heading and the first row of tiles
+   (.section-title is reset to margin: 0 further down the sheet) */
+.section-title + .events-grid {
+    margin-top: clamp(20px, 2.2vw, 38px);
+}
+
+@media (max-width: 1280px) {
+    .events-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 900px) {
+    .events-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* The tile itself: no padding so the artwork bleeds to the edges,
+   full height so every card in a row matches. */
+.events-grid .card {
+    max-width: none;
     width: 100%;
-    background: #000; /* Solid black background */
-    padding: 40px 20px;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #0a0a0a;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.events-grid .card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-color);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.65);
+}
+
+/* --- Poster artwork (column E of the sheet) --- */
+.event-card .event-media {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;      /* matches the square flyers, identical for every tile */
+    background: #000;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.event-card .event-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+}
+
+.events-grid .card:hover .event-media img {
+    transform: scale(1.05);
+}
+
+/* Darkens the top of the poster so the date badge stays readable */
+.event-card .event-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 40%);
+    pointer-events: none;
+}
+
+/* Fallback when a row has no image URL */
+.event-card .event-media--empty {
+    background: linear-gradient(145deg, #0d0d0d, #1c1c1c);
+}
+
+/* --- Floating date badge --- */
+.event-date-badge {
+    position: absolute;
+    top: clamp(8px, 0.8vw, 14px);
+    left: clamp(8px, 0.8vw, 14px);
+    z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-bottom: 3px solid var(--accent-color);
-    box-sizing: border-box;
+    min-width: clamp(46px, 4.5vw, 64px);
+    padding: clamp(6px, 0.6vw, 9px) clamp(8px, 0.7vw, 12px);
+    background: rgba(0, 0, 0, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 8px;
+    text-align: center;
+    line-height: 1;
 }
 
-.date-main {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-}
-
-/* The Month (JAN) */
-.date-main .m {
-    font-size: 2.5rem;
-    font-weight: 900;
-    letter-spacing: -1px;
+.event-date-badge .badge-month {
+    font-size: clamp(0.55rem, 0.48rem + 0.2vw, 0.7rem);
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
     color: #fff;
 }
 
-/* The Day (12) */
-.date-main .d {
-    font-size: 4.5rem;
+.event-date-badge .badge-day {
+    font-size: clamp(1.3rem, 0.95rem + 1vw, 2rem);
     font-weight: 900;
-    color: var(--accent-color);
-    line-height: 0.8;
+    line-height: 1;
+    color: #fff;
+    margin-top: 2px;
 }
 
-/* The Year (2026) */
-.date-year {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #444; /* Darker grey so it doesn't distract from the day/month */
-    letter-spacing: 8px;
-    margin-top: 10px;
-    text-indent: 8px; /* Centers the letter spacing */
-}
-
-/* Card Text Styling */
-.event-card .card-text h3 {
-    font-size: 1.4rem;
-    margin-bottom: 5px;
+.event-date-badge .badge-weekly {
+    font-size: clamp(0.65rem, 0.55rem + 0.3vw, 0.9rem);
+    font-weight: 900;
+    letter-spacing: 1px;
     text-transform: uppercase;
+    white-space: nowrap;
+    color: #fff;
+}
+
+.event-date-badge .badge-note {
+    font-size: clamp(0.48rem, 0.42rem + 0.15vw, 0.6rem);
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #8a8a8a;
+    margin-top: 4px;
+}
+
+/* --- Tile body: text on top, button always at the bottom --- */
+.event-card .event-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    padding: clamp(12px, 1.1vw, 20px);
+}
+
+.event-card .card-text {
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.event-card .card-text h3 {
+    font-size: clamp(0.8rem, 0.62rem + 0.55vw, 1.15rem);
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #fff;
+    margin: 0 0 6px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .event-card .location {
-    font-size: 0.85rem;
-    color: #888;
+    font-size: clamp(0.65rem, 0.57rem + 0.2vw, 0.8rem);
+    color: #8a8a8a;
     letter-spacing: 1px;
-}
-
-/* Event Image (from ImageURL / column E) */
-/* Sits as a banner between the date box and the event details.
-   Shows the WHOLE image (square or portrait) without cropping.
-   The tile itself grows to fit the image + text + button so
-   everything is always fully visible on every screen size. */
-.event-card .event-image {
-    width: 100%;
-    background: #000;         /* fills any letterbox space around the image */
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    border-bottom: 2px solid var(--accent-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
-.event-card .event-image img {
-    width: 70%;               /* scaled down so the image sits neatly in the tile */
-    height: auto;             /* keeps the image's natural aspect ratio */
-    object-fit: contain;      /* shows the entire image, nothing cut off */
+.event-card .location i {
+    margin-right: 5px;
+}
+
+.event-card .event-cta {
     display: block;
-    margin: 0 auto;           /* centres the scaled image */
+    width: 100%;
+    margin-top: clamp(10px, 1vw, 16px);
+    padding: clamp(9px, 0.8vw, 13px) 6px;
+    border-width: 1px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: clamp(0.6rem, 0.5rem + 0.25vw, 0.78rem);
+    letter-spacing: 1.5px;
 }
 
-/* An event tile with an image sizes itself to its content and never
-   stretches to match neighbours, so the picture, text and button
-   are always shown in full. */
-.event-card {
-    height: auto;
-    align-self: start;
+/* Phone overrides: beat the generic !important .card rules further
+   down the sheet so tiles stay edge-to-edge and equal height. */
+@media (max-width: 768px) {
+    .events-grid .card {
+        width: 100% !important;
+        height: 100% !important;
+        padding: 0 !important;
+        border-radius: 12px !important;
+        overflow: hidden !important;
+    }
+
+    .events-grid .card-text h3,
+    .events-grid .location {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-height: none !important;
+    }
+
+    .events-grid .card-text h3 {
+        font-size: clamp(0.8rem, 3.2vw, 1rem) !important;
+        margin: 0 0 4px 0 !important;
+    }
+
+    .events-grid .location {
+        font-size: clamp(0.68rem, 2.7vw, 0.8rem) !important;
+        margin: 0 !important;
+    }
+}
+
+/* Small phones: shrink the badge so it covers less of the flyer */
+@media (max-width: 560px) {
+    .event-date-badge {
+        top: 6px;
+        left: 6px;
+        min-width: 0;
+        padding: 5px 7px;
+        border-radius: 6px;
+    }
+
+    .event-date-badge .badge-month {
+        font-size: 0.5rem;
+        letter-spacing: 1.5px;
+    }
+
+    .event-date-badge .badge-day {
+        font-size: 1.05rem;
+        margin-top: 1px;
+    }
+
+    .event-date-badge .badge-weekly {
+        font-size: 0.6rem;
+        letter-spacing: 0.5px;
+    }
+
+    .event-date-badge .badge-note {
+        font-size: 0.45rem;
+        letter-spacing: 1px;
+        margin-top: 2px;
+    }
 }
 
 /* Spotify playlist embed on the Label / Releases page */
@@ -876,14 +1058,6 @@ img, gif {
     color: #fff;
     font-weight: 900;
     text-transform: uppercase;
-}
-
-.weekly-fix .m {
-    color: #fff !important; /* Keep days white */
-}
-
-.weekly-fix .d {
-    color: var(--accent-color) !important; /* Keep the '&' in accent color */
 }
 
 /* Ensure iframe is visible on Desktop */
@@ -986,16 +1160,16 @@ img, gif {
         align-items: start !important;
     }
 
-    /* Events Grid: single column on mobile so tiles never get cropped */
+    /* Events Grid: exactly 2 tiles per row on mobile */
     .events-grid {
         display: grid !important;
-        grid-template-columns: 1fr !important;
-        gap: 20px !important;
-        padding: 15px !important;
-        align-items: start !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+        padding: 0 !important;
+        align-items: stretch !important;
     }
 
-    /* Event tile fills the screen width neatly on mobile */
+    /* Event tile fills its column neatly on mobile */
     .events-grid .card {
         max-width: 100% !important;
     }

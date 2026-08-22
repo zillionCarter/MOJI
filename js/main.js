@@ -344,7 +344,7 @@ if (path.includes('label')) {
 
                     <div class="image-wrapper">
 
-                        <img src="${row[3]}" alt="${row[0]}">
+                        <img src="${row[3]}" alt="${row[0]}" loading="lazy">
 
                     </div>
 
@@ -382,63 +382,71 @@ if (path.includes('label')) {
 
             const renderEvent = (row) => {
 
+                const title = row[0] || 'TBA';
+
                 const dateStr = row[1] ? row[1].trim() : 'TBA';
+
+                const location = row[2] || '';
+
+                let link = row[3] ? row[3].trim() : '#';
+
+                const imageUrl = row[4] ? row[4].trim() : '';
+
+                const isPast = row[5]?.trim().toLowerCase() === 'past';
+
+                // Use white-label Megatix URLs where we have a confirmed slug.
+                // Falls back to the original ticket link (from the sheet) otherwise.
+                const WHITE_LABEL_SLUGS = {
+                    'unchained bali - bonka': 'unchained-bali-bonka'
+                };
+                const knownSlug = WHITE_LABEL_SLUGS[title.trim().toLowerCase()];
+                if (!isPast && knownSlug) {
+                    link = `https://megatix.co.id/white-label/${knownSlug}`;
+                }
 
                 const dateParts = dateStr.split(/\s+/);
 
-                let dateHtml = '';
+                let badgeHtml = '';
 
-               
+
 
                 if (dateStr.includes('&')) {
 
-                    dateHtml = `
+                    // Recurring night, e.g. "WED & SAT"
 
-                        <div class="date-main weekly-fix">
+                    badgeHtml = `
 
-                            <span class="m" style="font-size: 1.8rem;">${dateParts[0]}</span>
+                        <span class="badge-weekly">${dateParts[0]} &amp; ${dateParts[2] || ''}</span>
 
-                            <span class="d" style="font-size: 2.2rem; margin: 0 5px;">&</span>
-
-                            <span class="m" style="font-size: 1.8rem;">${dateParts[2]}</span>
-
-                        </div>
-
-                        <div class="date-year" style="letter-spacing: 2px;">WEEKLY</div>`;
+                        <span class="badge-note">Weekly</span>`;
 
                 } else {
 
                     const month = (dateParts[0] || '').substring(0, 3).toUpperCase();
 
-                    const day = dateParts[1] || '';
+                    // Keeps "5th" / "21st" but drops the comma in "17, 2026"
 
-                    const year = dateParts[2] || '';
+                    const day = (dateParts[1] || '').replace(/[^0-9a-z]/gi, '');
 
-                    dateHtml = `
+                    const year = (dateParts[2] || '').replace(/\D/g, '');
 
-                        <div class="date-main">
+                    badgeHtml = `
 
-                            <span class="m">${month}</span>
+                        <span class="badge-month">${month}</span>
 
-                            <span class="d">${day}</span>
+                        <span class="badge-day">${day}</span>
 
-                        </div>
-
-                        <div class="date-year">${year}</div>`;
+                        ${year ? `<span class="badge-note">${year}</span>` : ''}`;
 
                 }
 
 
 
-                const imageUrl = row[4] ? row[4].trim() : '';
+                const mediaInner = imageUrl
 
-                const imageHtml = imageUrl ? `
+                    ? `<img src="${imageUrl}" alt="${title} poster" loading="lazy">`
 
-                    <div class="event-image">
-
-                        <img src="${imageUrl}" alt="${row[0]}">
-
-                    </div>` : '';
+                    : '';
 
 
 
@@ -446,27 +454,31 @@ if (path.includes('label')) {
 
                 <div class="card event-card">
 
-                    <div class="event-date-container">
+                    <a class="event-media${imageUrl ? '' : ' event-media--empty'}" href="${link}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
 
-                        ${dateHtml}
+                        ${mediaInner}
 
-                    </div>
-
-                    ${imageHtml}
-
-                    <div class="card-text">
-
-                        <h3>${row[0]}</h3>
-
-                        <p class="location"><i class="fas fa-map-marker-alt"></i> ${row[2]}</p>
-
-                    </div>
-
-                    <a href="${row[3]}" class="btn" style="margin-top: auto;" target="_blank" rel="noopener">
-
-                        ${row[5]?.toLowerCase() === 'past' ? 'GALLERY' : 'TICKETS'}
+                        <span class="event-date-badge">${badgeHtml}</span>
 
                     </a>
+
+                    <div class="event-body">
+
+                        <div class="card-text">
+
+                            <h3>${title}</h3>
+
+                            <p class="location"><i class="fas fa-map-marker-alt"></i> ${location}</p>
+
+                        </div>
+
+                        <a href="${link}" class="btn event-cta" target="_blank" rel="noopener">
+
+                            ${isPast ? 'GALLERY' : 'TICKETS'}
+
+                        </a>
+
+                    </div>
 
                 </div>`;
 
@@ -534,7 +546,7 @@ if (path.includes('label')) {
 
                     <div class="artist-item">
 
-                        <img src="${img}" alt="${name}">
+                        <img src="${img}" alt="${name}" loading="lazy">
 
                         <div class="artist-item-info">
 

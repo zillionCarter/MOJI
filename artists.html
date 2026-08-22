@@ -3,49 +3,454 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARTISTS | UNCHAINED</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <!-- Crisp Chat -->
+    <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="b6127354-60e0-4682-aabd-df7d4349906d";window.$crisp.push(["config", "color:theme", ["red"]]);(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+    <meta name="robots" content="noindex, nofollow">
+    <title>Artists | Unchained — Moji & the Roster</title>
+    <meta name="description" content="Meet the artists on Unchained — hard techno DJs and producers from Bali and beyond, led by label founder Moji.">
+    <link rel="canonical" href="https://unchainedlabel.com/artists.html">
+    <meta property="og:title" content="Artists | Unchained — Moji & the Roster">
+    <meta property="og:description" content="Meet the artists on Unchained — hard techno DJs and producers from Bali and beyond, led by label founder Moji.">
+    <meta property="og:image" content="https://unchainedlabel.com/images/logo.png">
+    <meta property="og:url" content="https://unchainedlabel.com/artists.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Artists | Unchained — Moji & the Roster">
+    <meta name="twitter:description" content="Meet the artists on Unchained — hard techno DJs and producers from Bali and beyond, led by label founder Moji.">
+    <meta name="twitter:image" content="https://unchainedlabel.com/images/logo.png">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Unchained",
+      "url": "https://unchainedlabel.com",
+      "sameAs": [
+        "https://www.instagram.com/unchainedlabel/",
+        "https://soundcloud.com/mojimusicxx",
+        "https://www.youtube.com/@Unchainedlabel"
+      ]
+    }
+    </script>
+    <link rel="stylesheet" href="css/style.css?v=20260710-1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="js/main.js" defer></script>
     <link rel="preconnect" href="https://docs.google.com">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Transparent Top Bar Navigation styles */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.75) !important; /* Premium slight transparency */
+            backdrop-filter: blur(10px); /* Smooth background glass effect */
+            -webkit-backdrop-filter: blur(10px);
+            transition: background-color 0.3s ease;
+        }
+
+        /* Mobile specific controls container - hidden by default on desktop */
+        .nav-right-buttons-mobile {
+            display: none;
+        }
+
+        /* Desktop specific cart trigger styling */
+        .nav-links #nav-cart-trigger-desktop {
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        /* Floating Shopping Basket Drawer Shell */
+        :root {
+            --cart-drawer-width: 420px;
+        }
+        .cart-drawer {
+            position: fixed;
+            top: 0;
+            right: calc(-1 * var(--cart-drawer-width));
+            width: var(--cart-drawer-width);
+            height: 100vh;
+            background: #050505;
+            border-left: 1px solid #111;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .cart-drawer.open {
+            right: 0;
+        }
+        .cart-drawer-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .cart-drawer-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .cart-header {
+            padding: 2rem;
+            border-bottom: 1px solid #111;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cart-header h3 {
+            font-size: 1rem;
+            letter-spacing: 0.15rem;
+            margin: 0;
+            color: #fff;
+        }
+        .cart-close-btn {
+            background: transparent;
+            border: none;
+            color: #666;
+            font-size: 1.15rem;
+            cursor: pointer;
+        }
+        .cart-close-btn:hover {
+            color: #fff;
+        }
+        .cart-items-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .cart-empty-msg {
+            color: #444;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.1rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            border-bottom: 1px solid #111;
+            padding-bottom: 1.5rem;
+        }
+        .cart-item img {
+            width: 70px;
+            aspect-ratio: 1 / 1;
+            object-fit: contain;
+            border: 1px solid #1a1a1a;
+            background: #000;
+        }
+        .cart-item-details {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+        .cart-item-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 0.05rem;
+            color: #fff;
+        }
+        .cart-item-variant {
+            font-size: 0.75rem;
+            color: #555;
+            text-transform: uppercase;
+        }
+        .cart-item-price {
+            font-size: 0.8rem;
+            color: #aaa;
+            font-weight: 700;
+        }
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 0.25rem;
+        }
+        .cart-item-qty {
+            font-size: 0.75rem;
+            color: #888;
+        }
+        .cart-item-remove {
+            background: transparent;
+            border: none;
+            color: #444;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .cart-item-remove:hover {
+            color: #ff3b30;
+        }
+        .cart-footer {
+            padding: 2rem;
+            border-top: 1px solid #111;
+            background: #080808;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .cart-subtotal-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+            font-weight: 800;
+            color: #fff;
+        }
+        .cart-checkout-btn {
+            width: 100%;
+            background: #fff;
+            color: #000;
+            border: 1px solid #fff;
+            padding: 1rem;
+            font-family: var(--font-main);
+            font-size: 0.8rem;
+            font-weight: 900;
+            letter-spacing: 0.15rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-align: center;
+        }
+        .cart-checkout-btn:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .cart-drawer {
+                --cart-drawer-width: 100%;
+            }
+            /* Responsive Mobile Header Configuration Switching */
+            .nav-right-buttons-mobile {
+                display: flex;
+                align-items: center;
+                gap: 1.25rem;
+                order: 2;
+            }
+            .nav-right-buttons-mobile #nav-cart-trigger-mobile {
+                font-weight: 800;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.35rem;
+                color: #fff;
+                text-decoration: none;
+            }
+            .nav-toggle {
+                margin: 0 !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <nav>
         <a href="index.html" class="logo">
             <img src="images/white.png" alt="UNCHAINED">
         </a>
-        <button class="nav-toggle" aria-label="toggle navigation">
-            <i class="fas fa-bars"></i>
-        </button>
+
+        <div class="nav-right-buttons-mobile">
+            <a id="nav-cart-trigger-mobile" href="#"><i class="fas fa-shopping-bag"></i> (<span class="cart-count-badge-shared">0</span>)</a>
+            <button class="nav-toggle" aria-label="toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
         <div class="nav-links">
             <a href="index.html">Home</a>
             <a href="label.html">Label</a>
             <a href="events.html">Events</a>
             <a href="artists.html">Artists</a>
-            <a href="https://mojimusic.shop/" target="_blank" rel="noopener noreferrer">Merch</a>
+            <a href="shop.html">Shop</a>
             <a href="contact.html">Contact</a>
+            <a id="nav-cart-trigger-desktop" href="#"><i class="fas fa-shopping-bag"></i> (<span class="cart-count-badge-shared">0</span>)</a>
             <a href="label.html#demo-submission" class="btn btn-nav">SUBMIT DEMO</a>
         </div>
     </nav>
 
     <section style="margin-top: 80px;">
-    <h2 class="section-title">Our Artists</h2>
-    <div class="artist-list" id="artist-container">
-        <p>Loading artists...</p>
+        <h1 class="section-title">Unchained Artists</h1>
+        <div class="artist-list" id="artist-container">
+            <p>Loading artists...</p>
+        </div>
+    </section>
+
+    <div class="cart-drawer-backdrop" id="cart-backdrop"></div>
+    <div class="cart-drawer" id="cart-drawer-element">
+        <div class="cart-header">
+            <h3>Shopping Bag</h3>
+            <button type="button" class="cart-close-btn" id="cart-close-trigger"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items-list" id="cart-items-target">
+            <div class="cart-empty-msg">Your bag is currently empty.</div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-subtotal-row">
+                <span>Subtotal</span>
+                <span id="cart-subtotal-value">$0.00</span>
+            </div>
+            <button type="button" class="cart-checkout-btn" id="cart-checkout-trigger" disabled>Proceed To Checkout</button>
+        </div>
     </div>
-</section>
 
     <footer>
-    <div class="socials">
-        <a href="https://soundcloud.com/mojimusicxx" target="_blank"><i class="fab fa-soundcloud"></i></a>
-        <a href="https://www.youtube.com/@Unchainedlabel" target="_blank"><i class="fab fa-youtube"></i></a>
-    </div>
-    <p>&copy; 2026 UNCHAINED RECORDINGS. ALL RIGHTS RESERVED.</p>
-    
-    <p style="font-size: 0.75rem; color: #555; margin-top: 8px; letter-spacing: 1px;">
-    BUILT BY <a href="https://alexroper.dev" target="_blank" rel="noopener noreferrer" style="color: #888; text-decoration: none; border-bottom: 1px dotted #555; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#888'">ALEX ROPER</a>
-</p>
-</footer>
+        <div class="socials">
+            <a href="https://soundcloud.com/mojimusicxx" target="_blank"><i class="fab fa-soundcloud"></i></a>
+            <a href="https://www.youtube.com/@Unchainedlabel" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.instagram.com/unchainedlabel/" target="_blank"><i class="fab fa-instagram"></i></a>
+        </div>
+        <p>&copy; 2026 UNCHAINED LABEL. ALL RIGHTS RESERVED.</p>
+        
+        <p style="font-size: 0.75rem; color: #555; margin-top: 8px; letter-spacing: 1px;">
+        BUILT BY <a href="https://alexroper.dev" target="_blank" rel="noopener noreferrer" style="color: #888; text-decoration: none; border-bottom: 1px dotted #555; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#888'">ALEX ROPER</a>
+        </p>
+    </footer>
+
+    <script>
+        (async function () {
+            const domain = 'mojimusic.myshopify.com';
+            const token = '8add708b8a27362fc8f77478d8d608c0';
+            let cartId = localStorage.getItem('unchained_cart_id') || null;
+            let checkoutUrl = localStorage.getItem('unchained_checkout_url') || '';
+
+            function detectCountry() {
+                try {
+                    const locale = navigator.language || navigator.userLanguage || 'en-US';
+                    const region = (locale.split('-')[1] || '').toUpperCase();
+                    const map = { US: 'US', GB: 'GB', AU: 'AU', CA: 'CA', SG: 'SG', JP: 'JP' };
+                    return map[region] || 'US';
+                } catch (e) { return 'US'; }
+            }
+            const userCountry = detectCountry();
+
+            function formatPrice(amount, currencyCode) {
+                try {
+                    return new Intl.NumberFormat(navigator.language || 'en-US', {
+                        style: 'currency', currency: currencyCode
+                    }).format(Number(amount));
+                } catch (e) { return `${currencyCode} ${amount}`; }
+            }
+
+            async function queryShopify(query, variables = {}) {
+                const response = await fetch(`https://${domain}/api/2024-01/graphql.json`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-Shopify-Storefront-Access-Token': token },
+                    body: JSON.stringify({ query, variables })
+                });
+                const payload = await response.json();
+                return payload.data;
+            }
+
+            const cartDrawer = document.getElementById('cart-drawer-element');
+            const cartBackdrop = document.getElementById('cart-backdrop');
+            const cartItemsTarget = document.getElementById('cart-items-target');
+            const cartSubtotalValue = document.getElementById('cart-subtotal-value');
+            const cartCheckoutTrigger = document.getElementById('cart-checkout-trigger');
+
+            function openCart() { cartDrawer.classList.add('open'); cartBackdrop.classList.add('open'); }
+            function closeCart() { cartDrawer.classList.remove('open'); cartBackdrop.classList.remove('open'); }
+
+            document.getElementById('nav-cart-trigger-desktop').addEventListener('click', (e) => { e.preventDefault(); openCart(); });
+            document.getElementById('nav-cart-trigger-mobile').addEventListener('click', (e) => { e.preventDefault(); openCart(); });
+            document.getElementById('cart-close-trigger').addEventListener('click', closeCart);
+            cartBackdrop.addEventListener('click', closeCart);
+
+            async function syncCartData() {
+                if (!cartId) { updateCartCountUI(0); return; }
+                try {
+                    const data = await queryShopify(`
+                        query GetCartDetails($id: ID!, $country: CountryCode!) @inContext(country: $country) {
+                            cart(id: $id) {
+                                id checkoutUrl totalQuantity
+                                cost { totalAmount { amount currencyCode } }
+                                lines(first: 50) {
+                                    nodes {
+                                        id quantity
+                                        merchandise {
+                                            ... on ProductVariant {
+                                                id title priceV2 { amount currencyCode }
+                                                product { title images(first: 1) { nodes { url } } }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    `, { id: cartId, country: userCountry });
+
+                    const cart = data.cart;
+                    if (!cart) { localStorage.removeItem('unchained_cart_id'); cartId = null; updateCartCountUI(0); return; }
+                    checkoutUrl = cart.checkoutUrl;
+                    localStorage.setItem('unchained_checkout_url', checkoutUrl);
+                    updateCartCountUI(cart.totalQuantity || 0);
+                    renderCartItems(cart);
+                } catch (err) { console.error(err); }
+            }
+
+            function updateCartCountUI(count) {
+                document.querySelectorAll('.cart-count-badge-shared').forEach(badge => { badge.textContent = count; });
+            }
+
+            function renderCartItems(cart) {
+                const lines = cart.lines?.nodes || [];
+                if (lines.length === 0) {
+                    cartItemsTarget.innerHTML = `<div class="cart-empty-msg">Your bag is currently empty.</div>`;
+                    cartSubtotalValue.textContent = formatPrice(0, 'USD');
+                    cartCheckoutTrigger.disabled = true;
+                    return;
+                }
+                cartItemsTarget.innerHTML = '';
+                lines.forEach(line => {
+                    const variant = line.merchandise;
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'cart-item';
+                    const imgUrl = variant.product?.images?.nodes?.[0]?.url || 'images/artwork.jpg';
+                    const itemTotal = formatPrice(Number(variant.priceV2.amount) * line.quantity, variant.priceV2.currencyCode);
+
+                    itemElement.innerHTML = `
+                        <img src="${imgUrl}" alt="${variant.product?.title}">
+                        <div class="cart-item-details">
+                            <div class="cart-item-title">${variant.product?.title}</div>
+                            <div class="cart-item-variant">${variant.title !== 'Default Title' ? variant.title : ''}</div>
+                            <div class="cart-item-price">${itemTotal}</div>
+                            <div class="cart-item-actions">
+                                <span class="cart-item-qty">Qty: ${line.quantity}</span>
+                                <button type="button" class="cart-item-remove" data-line-id="${line.id}">Remove</button>
+                            </div>
+                        </div>
+                    `;
+                    itemElement.querySelector('.cart-item-remove').addEventListener('click', async (e) => {
+                        e.target.textContent = '...';
+                        await queryShopify(`mutation DeleteItem($cartId: ID!, $lineIds: [ID!]!) { cartLinesRemove(cartId: $cartId, lineIds: $lineIds) { cart { id } } }`, { cartId, lineIds: [line.id] });
+                        await syncCartData();
+                    });
+                    cartItemsTarget.appendChild(itemElement);
+                });
+                cartSubtotalValue.textContent = formatPrice(cart.cost?.totalAmount?.amount, cart.cost?.totalAmount?.currencyCode);
+                cartCheckoutTrigger.disabled = false;
+            }
+
+            cartCheckoutTrigger.addEventListener('click', () => { if (checkoutUrl) window.location.href = checkoutUrl; });
+            await syncCartData();
+        })();
+    </script>
 </body>
 </html>
