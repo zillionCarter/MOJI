@@ -402,6 +402,20 @@ if (path.includes('label')) {
 
                 const isPast = row[5]?.trim().toLowerCase() === 'past';
 
+                // Genres line under the location. Comes from an optional 7th sheet column
+                // ("Genres"); Terminus nights fall back to the defaults below so they show
+                // without touching the sheet.
+                const TERMINUS_GENRES = {
+                    'wednesday': 'Hard Techno, Industrial, Hardcore, Psy, Raw, UpTempo',
+                    'friday': 'Hard Bounce, Hard Trance, Hard Groove, Neo Rave, Schranz',
+                    'saturday': 'Hard Techno, Industrial, Hardcore, Psy, Raw, UpTempo',
+                    'wed & sat': 'Hard Techno, Industrial, Hardcore, Psy, Raw, UpTempo'
+                };
+                let genres = row[6] ? row[6].trim() : '';
+                if (!genres && !isPast && /terminus/i.test(title)) {
+                    genres = TERMINUS_GENRES[dateStr.toLowerCase()] || '';
+                }
+
                 // Any Megatix link pasted into the sheet (megatix.co.id/events/<slug>)
                 // is converted to its white-label form so the Megatix widget on
                 // events.html opens the embedded checkout instead of leaving the site.
@@ -486,6 +500,8 @@ if (path.includes('label')) {
                             <h3>${title}</h3>
 
                             <p class="location"><i class="fas fa-map-marker-alt"></i> ${location}</p>
+
+                            ${genres ? `<p class="genres">${genres}</p>` : ''}
 
                         </div>
 

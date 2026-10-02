@@ -958,6 +958,14 @@ img, gif {
     margin-right: 5px;
 }
 
+.event-card .genres {
+    font-size: clamp(0.55rem, 0.5rem + 0.15vw, 0.68rem);
+    color: #6a6a6a;
+    letter-spacing: 0.5px;
+    line-height: 1.4;
+    margin: 6px 0 0;
+}
+
 .event-card .event-cta {
     display: block;
     width: 100%;
