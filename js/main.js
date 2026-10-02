@@ -210,7 +210,15 @@ function renderPage() {
 
 
 
-                if (dateStr.includes('&')) {
+                if (/^(mon|tue|wed|thu|fri|sat|sun)[a-z]*$/i.test(dateStr)) {
+
+                    dateBoxInner = `
+
+                        <div style="font-size: 1.1rem; color: #fff; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;">${dateStr.substring(0, 3)}</div>
+
+                        <div style="font-size: 0.55rem; color: var(--accent-color); font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin-top: 3px;">Weekly</div>`;
+
+                } else if (dateStr.includes('&')) {
 
                     const parts = dateStr.split(/\s+/);
 
@@ -409,7 +417,17 @@ if (path.includes('label')) {
 
 
 
-                if (dateStr.includes('&')) {
+                if (/^(mon|tue|wed|thu|fri|sat|sun)[a-z]*$/i.test(dateStr)) {
+
+                    // Single recurring night, e.g. "Wednesday"
+
+                    badgeHtml = `
+
+                        <span class="badge-weekly">${dateStr.substring(0, 3)}</span>
+
+                        <span class="badge-note">Weekly</span>`;
+
+                } else if (dateStr.includes('&')) {
 
                     // Recurring night, e.g. "WED & SAT"
 
