@@ -394,17 +394,13 @@ if (path.includes('label')) {
 
                 const isPast = row[5]?.trim().toLowerCase() === 'past';
 
-                // Use white-label Megatix URLs where we have a confirmed slug.
-                // Falls back to the original ticket link (from the sheet) otherwise.
-                const WHITE_LABEL_SLUGS = {
-                    'unchained bali - bonka': 'unchained-bali-bonka',
-                    'terminus': 'terminus-bali',
-                    'unchained jakarta': 'unchained-jakarta',
-                    'ship faced - bali boat rave': 'unchained-pres-ship-faced-bali-boat-rave'
-                };
-                const knownSlug = WHITE_LABEL_SLUGS[title.trim().toLowerCase()];
-                if (!isPast && knownSlug) {
-                    link = `https://megatix.co.id/white-label/${knownSlug}`;
+                // Any Megatix link pasted into the sheet (megatix.co.id/events/<slug>)
+                // is converted to its white-label form so the Megatix widget on
+                // events.html opens the embedded checkout instead of leaving the site.
+                // Non-Megatix links (and past events) are left untouched.
+                const megatixMatch = link.match(/^https?:\/\/(?:www\.)?megatix\.co\.id\/(?:events|white-label)\/([^/?#\s]+)/i);
+                if (!isPast && megatixMatch) {
+                    link = `https://megatix.co.id/white-label/${megatixMatch[1]}`;
                 }
 
                 const dateParts = dateStr.split(/\s+/);
