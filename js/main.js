@@ -214,7 +214,7 @@ function renderPage() {
 
                     dateBoxInner = `
 
-                        <div style="font-size: 1.1rem; color: #fff; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;">${dateStr.substring(0, 3)}</div>
+                        <div style="font-size: 0.8rem; color: #fff; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;">${dateStr}</div>
 
                         <div style="font-size: 0.55rem; color: var(--accent-color); font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin-top: 3px;">Weekly</div>`;
 
@@ -423,7 +423,7 @@ if (path.includes('label')) {
 
                     badgeHtml = `
 
-                        <span class="badge-weekly">${dateStr.substring(0, 3)}</span>
+                        <span class="badge-weekly">${dateStr}</span>
 
                         <span class="badge-note">Weekly</span>`;
 
