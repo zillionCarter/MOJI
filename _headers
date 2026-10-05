@@ -1,0 +1,10 @@
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://client.crisp.chat https://*.crisp.chat https://connect.facebook.net https://*.googletagmanager.com https://*.google-analytics.com https://megatix.co.id https://*.megatix.co.id; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://*.crisp.chat; font-src 'self' data: https://cdnjs.cloudflare.com https://*.crisp.chat; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; connect-src 'self' https://*.a.run.app https://*.on.aws https://docs.google.com https://*.googleusercontent.com https://*.myshopify.com https://*.crisp.chat wss://*.crisp.chat https://*.facebook.com https://connect.facebook.net https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://*.g.doubleclick.net https://www.google.com https://megatix.co.id https://*.megatix.co.id; frame-src https://open.spotify.com https://megatix.co.id https://*.megatix.co.id https://*.crisp.chat https://www.googletagmanager.com; form-action 'self' https://formspree.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=()
+  Strict-Transport-Security: max-age=31536000
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable

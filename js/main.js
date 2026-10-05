@@ -28,6 +28,19 @@ var siteData = null; // Change 'let' to 'var' here too
 
 // --- UTILITIES ---
 
+// Content comes from a Google Sheet and is inserted with innerHTML, so everything
+// is escaped / URL-checked first. Use esc() for text and attributes, safeUrl() for links and images.
+function esc(value) {
+    return String(value ?? '').replace(/[&<>"']/g, ch => (
+        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]
+    ));
+}
+
+function safeUrl(value) {
+    const u = String(value ?? '').trim();
+    return /^(https?:\/\/|\/|#|mailto:)/i.test(u) ? u : '#';
+}
+
 
 
 function parseCSV(text) {
@@ -186,11 +199,11 @@ function renderPage() {
 
                     <h3 style="color: var(--accent-color); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px;">New Release</h3>
 
-                    <h2 style="margin: 10px 0; font-size: 1.4rem;">${topRelease[0]}</h2>
+                    <h2 style="margin: 10px 0; font-size: 1.4rem;">${esc(topRelease[0])}</h2>
 
-                    <p style="color: #888; font-size: 0.85rem; line-height: 1.4;">${topRelease[1]}</p>
+                    <p style="color: #888; font-size: 0.85rem; line-height: 1.4;">${esc(topRelease[1])}</p>
 
-                    <a href="${topRelease[2]}" class="btn" style="padding: 8px 18px; margin-top: 15px; font-size: 0.8rem;" target="_blank" rel="noopener">${topRelease[3]}</a>
+                    <a href="${esc(safeUrl(topRelease[2]))}" class="btn" style="padding: 8px 18px; margin-top: 15px; font-size: 0.8rem;" target="_blank" rel="noopener">${esc(topRelease[3])}</a>
 
                 </div>`;
 
@@ -226,11 +239,11 @@ function renderPage() {
 
                         <div style="line-height: 1.1;">
 
-                            <div style="font-size: 1.1rem; color: #fff; font-weight: 900; letter-spacing: 1px;">${parts[0]}</div>
+                            <div style="font-size: 1.1rem; color: #fff; font-weight: 900; letter-spacing: 1px;">${esc(parts[0])}</div>
 
                             <div style="font-size: 0.8rem; color: var(--accent-color); font-weight: 900; margin: -2px 0;">&</div>
 
-                            <div style="font-size: 1.1rem; color: #fff; font-weight: 900; letter-spacing: 1px;">${parts[2]}</div>
+                            <div style="font-size: 1.1rem; color: #fff; font-weight: 900; letter-spacing: 1px;">${esc(parts[2])}</div>
 
                         </div>`;
 
@@ -244,9 +257,9 @@ function renderPage() {
 
                     dateBoxInner = `
 
-                        <div style="font-size: 0.8rem; color: #fff; font-weight: 900; text-transform: uppercase;">${month}</div>
+                        <div style="font-size: 0.8rem; color: #fff; font-weight: 900; text-transform: uppercase;">${esc(month)}</div>
 
-                        <div style="font-size: 1.8rem; color: var(--accent-color); font-weight: 900; line-height: 1;">${day}</div>`;
+                        <div style="font-size: 1.8rem; color: var(--accent-color); font-weight: 900; line-height: 1;">${esc(day)}</div>`;
 
                 }
 
@@ -270,9 +283,9 @@ function renderPage() {
 
                                 <div style="flex: 1;">
 
-                                    <h3 style="font-size: 1.1rem; color: #fff; margin: 0; line-height: 1.2;">${nextEvent[0]}</h3>
+                                    <h3 style="font-size: 1.1rem; color: #fff; margin: 0; line-height: 1.2;">${esc(nextEvent[0])}</h3>
 
-                                    <p style="font-size: 0.75rem; color: #666; margin: 4px 0 0 0; text-transform: uppercase; letter-spacing: 1px;">${nextEvent[2]}</p>
+                                    <p style="font-size: 0.75rem; color: #666; margin: 4px 0 0 0; text-transform: uppercase; letter-spacing: 1px;">${esc(nextEvent[2])}</p>
 
                                 </div>
 
@@ -338,13 +351,11 @@ if (path.includes('label')) {
             const rawSpotify = row[2];
             const embedSrc = toSpotifyEmbed(rawSpotify);
 
-            console.log('Release Row:', row);
-            console.log('mSpot (link):', mSpot, 'spotify raw:', rawSpotify, 'embed:', embedSrc);
 
             // Only add onclick if link exists and is not empty
-            const onclickHandler = mSpot && mSpot.trim() ? `onclick="window.open('${mSpot.trim()}', '_blank');"` : '';
+            const onclickHandler = mSpot && mSpot.trim() ? `data-href="${esc(safeUrl(mSpot))}"` : '';
 
-            const iframeHtml = embedSrc ? `\n                    <iframe style=\"border-radius:12px; margin-top:15px; width:100%; height:232px; border:none;\" src=\"${embedSrc}\" frameBorder=\"0\" allow=\"autoplay; encrypted-media;\" loading=\"lazy\"></iframe>` : '';
+            const iframeHtml = embedSrc ? `\n                    <iframe style=\"border-radius:12px; margin-top:15px; width:100%; height:232px; border:none;\" src=\"${esc(safeUrl(embedSrc))}\" frameBorder=\"0\" allow=\"autoplay; encrypted-media;\" loading=\"lazy\"></iframe>` : '';
 
             return `
 
@@ -352,15 +363,15 @@ if (path.includes('label')) {
 
                     <div class="image-wrapper">
 
-                        <img src="${row[3]}" alt="${row[0]}" loading="lazy">
+                        <img src="${esc(safeUrl(row[3]))}" alt="${esc(row[0])}" loading="lazy">
 
                     </div>
 
                     <div class="card-text">
 
-                        <h3>${row[0]}</h3>
+                        <h3>${esc(row[0])}</h3>
 
-                        <p>${row[1]}</p>
+                        <p>${esc(row[1])}</p>
 
                     </div>
 
@@ -369,6 +380,14 @@ if (path.includes('label')) {
                 </div>`;
 
         }).join('');
+
+        // Cards with a data-href open their link in a new tab (replaces an inline onclick).
+        container.querySelectorAll('.card[data-href]').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('iframe')) return;
+                window.open(card.dataset.href, '_blank', 'noopener');
+            });
+        });
 
     }
 
@@ -447,7 +466,7 @@ if (path.includes('label')) {
 
                     badgeHtml = `
 
-                        <span class="badge-weekly">${dateParts[0]} &amp; ${dateParts[2] || ''}</span>
+                        <span class="badge-weekly">${esc(dateParts[0])} &amp; ${esc(dateParts[2] || '')}</span>
 
                         <span class="badge-note">Weekly</span>`;
 
@@ -463,9 +482,9 @@ if (path.includes('label')) {
 
                     badgeHtml = `
 
-                        <span class="badge-month">${month}</span>
+                        <span class="badge-month">${esc(month)}</span>
 
-                        <span class="badge-day">${day}</span>
+                        <span class="badge-day">${esc(day)}</span>
 
                         ${year ? `<span class="badge-note">${year}</span>` : ''}`;
 
@@ -475,7 +494,7 @@ if (path.includes('label')) {
 
                 const mediaInner = imageUrl
 
-                    ? `<img src="${imageUrl}" alt="${title} poster" loading="lazy">`
+                    ? `<img src="${esc(safeUrl(imageUrl))}" alt="${esc(title)} poster" loading="lazy">`
 
                     : '';
 
@@ -485,7 +504,7 @@ if (path.includes('label')) {
 
                 <div class="card event-card">
 
-                    <a class="event-media${imageUrl ? '' : ' event-media--empty'}" href="${link}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+                    <a class="event-media${imageUrl ? '' : ' event-media--empty'}" href="${esc(safeUrl(link))}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
 
                         ${mediaInner}
 
@@ -497,15 +516,15 @@ if (path.includes('label')) {
 
                         <div class="card-text">
 
-                            <h3>${title}</h3>
+                            <h3>${esc(title)}</h3>
 
-                            <p class="location"><i class="fas fa-map-marker-alt"></i> ${location}</p>
+                            <p class="location"><i class="fas fa-map-marker-alt"></i> ${esc(location)}</p>
 
-                            ${genres ? `<p class="genres">${genres}</p>` : ''}
+                            ${genres ? `<p class="genres">${esc(genres)}</p>` : ''}
 
                         </div>
 
-                        <a href="${link}" class="btn event-cta" target="_blank" rel="noopener">
+                        <a href="${esc(safeUrl(link))}" class="btn event-cta" target="_blank" rel="noopener">
 
                             ${isPast ? 'GALLERY' : 'TICKETS'}
 
@@ -579,25 +598,25 @@ if (path.includes('label')) {
 
                     <div class="artist-item">
 
-                        <img src="${img}" alt="${name}" loading="lazy">
+                        <img src="${esc(safeUrl(img))}" alt="${esc(name)}" loading="lazy">
 
                         <div class="artist-item-info">
 
-                            <h3>${name}</h3>
+                            <h3>${esc(name)}</h3>
 
-                            <p>${bio}</p>
+                            <p>${esc(bio)}</p>
 
                         </div>
 
                         <div class="artist-item-socials">
 
-                            ${sc ? `<a href="${sc}" target="_blank"><i class="fab fa-soundcloud"></i></a>` : ''}
+                            ${sc ? `<a href="${esc(safeUrl(sc))}" target="_blank" rel="noopener noreferrer"><i class="fab fa-soundcloud"></i></a>` : ''}
 
-                            ${ig ? `<a href="${ig}" target="_blank"><i class="fab fa-instagram"></i></a>` : ''}
+                            ${ig ? `<a href="${esc(safeUrl(ig))}" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>` : ''}
 
-                            ${fb ? `<a href="${fb}" target="_blank"><i class="fab fa-facebook"></i></a>` : ''}
+                            ${fb ? `<a href="${esc(safeUrl(fb))}" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>` : ''}
 
-                            ${sp ? `<a href="${sp}" target="_blank"><i class="fab fa-spotify"></i></a>` : ''}
+                            ${sp ? `<a href="${esc(safeUrl(sp))}" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>` : ''}
 
                         </div>
 

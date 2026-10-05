@@ -13,3 +13,4 @@ package-lock.json
 .gitignore
 .gitattributes
 README.md
+worker
