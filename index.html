@@ -995,33 +995,6 @@
         </div>
     </div>
 
-    <section class="merch-home" id="world-cup">
-        <div class="sec-head">
-            <div>
-                <div class="sec-eyebrow">LIMITED EDITION</div>
-                <h2 class="sec-title">World Cup Collection</h2>
-            </div>
-        </div>
-        
-        <div class="featured-grid" id="world-cup-merch">
-            <div class="merch-loading">Loading collection…</div>
-        </div>
-    </section>
-
-    <div class="ticker">
-        <div class="ticker-inner">
-            <span class="ticker-item">UNCHAINED . FROM BALI TO THE WORLD</span>
-            <span class="ticker-item">UNCHAINED . FROM BALI TO THE WORLD</span>
-            <span class="ticker-item">UNCHAINED . FROM BALI TO THE WORLD</span>
-            <span class="ticker-item">UNCHAINED . FROM BALI TO THE WORLD</span>
-            <span class="ticker-item">UNCHAINED . FROM BALI TO THE WORLD</span>
-            <span class="ticker-item">UNCHAINED . FROM BALI TO THE WORLD</span>
-            <span class="ticker-item">UNCHAINED . FROM BALI TO THE WORLD</span>
-            <span class="ticker-item">UNCHAINED . FROM BALI TO THE WORLD</span>
-            <span class="ticker-item">UNCHAINED . FROM BALI TO THE WORLD</span>
-        </div>
-    </div>
-
     <section class="merch-home" id="gallery-section">
         <div class="sec-head">
             <div>
@@ -1598,8 +1571,7 @@
 
             async function loadProducts() {
                 const drop001Container = document.getElementById('home-merch');
-                const worldCupContainer = document.getElementById('world-cup-merch');
-                if (!drop001Container || !worldCupContainer) return;
+                if (!drop001Container) return;
                 
                 try {
                     // Fetch each product by its exact handle using GraphQL aliases, rather than a
@@ -1628,23 +1600,18 @@
 
                     if (!globalProductsCache.length) { 
                         drop001Container.innerHTML = '<div class="merch-loading">Vault currently empty.</div>';
-                        worldCupContainer.innerHTML = '<div class="merch-loading">Vault currently empty.</div>'; 
                         return; 
                     }
                     
                     drop001Container.innerHTML = '';
-                    worldCupContainer.innerHTML = '';
 
                     globalProductsCache.forEach(product => {
                         if (drop001Handles.includes(product.handle)) {
                             drop001Container.appendChild(createCard(product));
-                        } else if (worldCupHandles.includes(product.handle)) {
-                            worldCupContainer.appendChild(createCard(product));
                         }
                     });
                 } catch (error) { 
                     drop001Container.innerHTML = '<div class="merch-loading">Storefront unavailable.</div>';
-                    worldCupContainer.innerHTML = '<div class="merch-loading">Storefront unavailable.</div>';
                 }
             }
 
