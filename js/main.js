@@ -417,9 +417,14 @@ if (path.includes('label')) {
 
                 let link = row[3] ? row[3].trim() : '#';
 
-                const imageUrl = row[4] ? row[4].trim() : '';
-
                 const isPast = row[5]?.trim().toLowerCase() === 'past';
+
+                // Posters hosted on the site itself (sharper + faster than the sheet's
+                // third-party links). Keyed by event title; the sheet image is used otherwise.
+                const LOCAL_POSTERS = {
+                    'ship faced 2 - bali boat rave': '/assets/images/events/ship-faced-2.webp'
+                };
+                const imageUrl = LOCAL_POSTERS[title.trim().toLowerCase()] || (row[4] ? row[4].trim() : '');
 
                 // Genres line under the location. Comes from an optional 7th sheet column
                 // ("Genres"); Terminus nights fall back to the defaults below so they show
@@ -494,7 +499,7 @@ if (path.includes('label')) {
 
                 const mediaInner = imageUrl
 
-                    ? `<img src="${esc(safeUrl(imageUrl))}" alt="${esc(title)} poster" loading="lazy">`
+                    ? `<img src="${esc(safeUrl(imageUrl))}" alt="${esc(title)} poster" width="800" height="800" decoding="async" loading="${isPast ? 'lazy' : 'eager'}">`
 
                     : '';
 

@@ -8,3 +8,6 @@
 
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
+
+/assets/images/events/*
+  Cache-Control: public, max-age=31536000, immutable
