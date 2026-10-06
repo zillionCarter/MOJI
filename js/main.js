@@ -422,7 +422,7 @@ if (path.includes('label')) {
                 // Posters hosted on the site itself (sharper + faster than the sheet's
                 // third-party links). Keyed by event title; the sheet image is used otherwise.
                 const LOCAL_POSTERS = {
-                    'ship faced 2 - bali boat rave': '/assets/images/events/ship-faced-2.webp'
+                    'ship faced 2 - bali boat rave': '/assets/images/events/ship-faced-2-boat.webp'
                 };
                 const imageUrl = LOCAL_POSTERS[title.trim().toLowerCase()] || (row[4] ? row[4].trim() : '');
 
@@ -499,7 +499,7 @@ if (path.includes('label')) {
 
                 const mediaInner = imageUrl
 
-                    ? `<img src="${esc(safeUrl(imageUrl))}" alt="${esc(title)} poster" width="800" height="800" decoding="async" loading="${isPast ? 'lazy' : 'eager'}">`
+                    ? `<img src="${esc(safeUrl(imageUrl))}" alt="${esc(title)} poster" width="1080" height="1080" decoding="async" loading="${isPast ? 'lazy' : 'eager'}">`
 
                     : '';
 
