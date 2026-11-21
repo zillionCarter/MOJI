@@ -184,6 +184,27 @@
         /* ==========================================================================
            UNFILTERED HERO SCENE BACKGROUND VIDEO & CATEGORY CONTROLS
            ========================================================================== */
+        /* Poster layer over the video: visible until playback actually starts, so
+           the browser's "tap to play" glyph (iOS Low Power Mode, data saver) is
+           never shown. pointer-events:none keeps every button clickable. */
+        .hero-video-cover {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background: url('hero-poster.jpg') center center / cover no-repeat;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+        .hero-video-cover.is-hidden { opacity: 0; }
+        /* 60s animated loop used only when autoplay is refused (iOS Low Power
+           Mode / Safari "never auto-play"), so the hero still moves without a tap. */
+        .hero-video-cover.is-animated { background-image: url('hero-loop.gif'); }
+
+        /* Sits the hero block (and the Unchained logo) a little lower, closer to
+           the middle of the screen. */
+        .hero .hero-content { top: 36px; }
+
         .hero-video-bg {
             position: absolute;
             top: 0;
@@ -849,26 +870,37 @@
             .modal-desc { display: none !important; }
         }
         @media (max-width: 768px) {
-            /* Three tidy stacked rows with dividers instead of wrapped, ragged
-               text sitting next to a bullet. Dots are hidden on mobile. */
+            /* All three notes stay on ONE row on mobile (never stacked). The
+               condensed face is what lets 100 characters fit in a phone width. */
             .promo-bar {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 0;
-                padding: 0;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                align-items: center;
+                justify-content: center;
+                justify-content: safe center;
+                gap: 8px;
+                padding: 9px 8px;
             }
             .promo-item {
-                display: block;
-                width: 100%;
-                padding: 10px 18px;
-                font-size: 9.5px;
-                line-height: 1.5;
-                letter-spacing: 0.1em;
-                text-align: center;
-                text-wrap: balance;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                font-family: 'Barlow Condensed', sans-serif;
+                font-weight: 700;
+                /* Scales with the viewport so all three notes fit on one row
+                   down to ~320px without ever wrapping or scrolling. */
+                font-size: clamp(6.5px, 2.05vw, 9px);
+                line-height: 1.15;
+                letter-spacing: 0.02em;
+                text-align: left;
+                white-space: nowrap;
             }
+            /* Dots cost too much width at this size, so they go on mobile. */
             .promo-item::before { display: none; }
-            .promo-item + .promo-item { border-top: 1px solid var(--border); }
+
+            /* Red ticker: slightly smaller type and a thinner bar on mobile. */
+            .ticker { padding: 8px 0; }
+            .ticker-item { font-size: 17px; padding: 0 18px; }
             
             .hero-buttons-container {
                 display: flex !important;
@@ -971,6 +1003,7 @@
         <video autoplay muted loop playsinline class="hero-video-bg" id="heroVideo" preload="auto" poster="hero-poster.jpg">
             <source src="video.mp4" type="video/mp4">
         </video>
+        <div class="hero-video-cover" id="heroVideoCover" aria-hidden="true"></div>
 
         <div class="hero-content">
             <img src="images/logo.png" class="hero-logo" alt="UNCHAINED">
@@ -1183,11 +1216,13 @@
         })();
 
         const video = document.getElementById('heroVideo');
+        const videoCover = document.getElementById('heroVideoCover');
 
         // Hides the <video> and puts css/video_fallback.gif in the hero background.
         function showVideoFallback() {
             if (!video) return;
             video.style.display = 'none';
+            if (videoCover) videoCover.classList.add('is-hidden');
             const hero = video.closest('.hero');
             if (hero) {
                 hero.style.backgroundImage = "url('css/video_fallback.gif')";
@@ -1201,18 +1236,58 @@
             // Muted + playsinline is what lets phones autoplay at all.
             video.muted = true;
             video.defaultMuted = true;
+            video.playsInline = true;
+
+            let started = false;
+
+            // Autoplay refused (iOS Low Power Mode, data saver, Safari "never
+            // auto-play"): roll the 60s animated loop under the poster instead, so
+            // the hero still moves with no tap and no play button.
+            const showAnimatedLoop = () => {
+                if (!videoCover || videoCover.classList.contains('is-animated')) return;
+                videoCover.classList.remove('is-hidden');
+                videoCover.classList.add('is-animated');
+            };
 
             const tryPlay = () => {
+                if (started) return;
                 const playPromise = video.play();
-                if (playPromise !== undefined) playPromise.catch(() => {});
+                if (playPromise !== undefined) {
+                    playPromise.catch(err => {
+                        if (err && err.name === 'NotAllowedError') showAnimatedLoop();
+                    });
+                }
             };
-            tryPlay();
 
-            // Low Power Mode and data saver can refuse autoplay until the page has
-            // been touched, so retry on the first interaction and whenever the tab
-            // comes back. Playback is muted, so no unmute prompt is involved.
+            // Reveal the video the moment it is genuinely playing. Until then the
+            // poster cover hides the browser's big "play" button, so the hero looks
+            // like a still frame instead of something you have to tap.
+            video.addEventListener('playing', () => {
+                started = true;
+                if (videoCover) {
+                    videoCover.classList.remove('is-animated');
+                    videoCover.classList.add('is-hidden');
+                }
+            });
+
+            // Ask to play as early and as often as the browser allows: on every
+            // media milestone, as soon as the hero scrolls into view, and on a few
+            // short timers. Muted playback needs no permission.
+            ['loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough'].forEach(evt =>
+                video.addEventListener(evt, tryPlay)
+            );
+            if ('IntersectionObserver' in window) {
+                new IntersectionObserver(entries => {
+                    entries.forEach(entry => { if (entry.isIntersecting) tryPlay(); });
+                }, { threshold: 0.25 }).observe(video);
+            }
+            [0, 250, 1000, 2500, 5000].forEach(ms => setTimeout(tryPlay, ms));
+
+            // Low Power Mode / data saver can hold playback until the page has been
+            // touched. These stay attached (not `once`) so the first gesture anywhere
+            // starts it, and so does returning to the tab.
             ['pointerdown', 'touchstart', 'keydown', 'scroll'].forEach(evt =>
-                window.addEventListener(evt, tryPlay, { once: true, passive: true })
+                window.addEventListener(evt, tryPlay, { passive: true })
             );
             document.addEventListener('visibilitychange', () => {
                 if (!document.hidden) tryPlay();
@@ -1224,6 +1299,12 @@
             setTimeout(() => {
                 if (video.error || video.networkState === 3) showVideoFallback();
             }, 3000);
+
+            // Safari can refuse autoplay silently -- data is buffered but nothing
+            // plays and play() never rejects. Treat that as blocked.
+            setTimeout(() => {
+                if (!started && video.readyState >= 2 && video.paused) showAnimatedLoop();
+            }, 2500);
         }
 
         // NOTE: "VIEW COLLECTION" now links straight to shop.html (a real page listing every
