@@ -849,12 +849,26 @@
             .modal-desc { display: none !important; }
         }
         @media (max-width: 768px) {
+            /* Three tidy stacked rows with dividers instead of wrapped, ragged
+               text sitting next to a bullet. Dots are hidden on mobile. */
             .promo-bar {
                 flex-direction: column;
-                gap: 12px;
-                padding: 16px 24px;
+                align-items: stretch;
+                gap: 0;
+                padding: 0;
             }
-            .promo-item { font-size: 9px; text-align: center; justify-content: center; }
+            .promo-item {
+                display: block;
+                width: 100%;
+                padding: 10px 18px;
+                font-size: 9.5px;
+                line-height: 1.5;
+                letter-spacing: 0.1em;
+                text-align: center;
+                text-wrap: balance;
+            }
+            .promo-item::before { display: none; }
+            .promo-item + .promo-item { border-top: 1px solid var(--border); }
             
             .hero-buttons-container {
                 display: flex !important;
