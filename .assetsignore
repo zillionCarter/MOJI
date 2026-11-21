@@ -5,6 +5,7 @@ node_modules
 .claude
 .netlify
 .wrangler
+.freebuff
 __pycache__
 *.py
 wrangler.jsonc
