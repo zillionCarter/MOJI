@@ -131,10 +131,14 @@
 
         /* BRUTALIST OVERLAY INSIGNIAS */
         .pcard-badge { position: absolute; top: 14px; left: 14px; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; background: var(--accent); color: var(--white); padding: 5px 12px; z-index: 3; font-weight: 700; }
+        /* 50% OFF label — deliberately bigger than the standard card badges */
+        .pcard .pcard-badge-sale { font-size: 15px; padding: 9px 15px; letter-spacing: 0.11em; }
         .pcard-info { padding: 20px 24px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; background: var(--surface); }
         .pcard-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 22px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--white); line-height: 1.1; }
         .pcard-type { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.13em; color: var(--dim); margin-top: 6px; text-transform: lowercase; }
         .pcard-price { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 22px; color: var(--white); white-space: nowrap; }
+        /* Crossed-out original price next to a sale price */
+        .price-was { color: var(--dim); font-weight: 400; font-size: 0.8em; margin-right: 6px; text-decoration: line-through; }
         .merch-loading { font-family: 'Space Mono', monospace; color: var(--dim); font-size: 12px; letter-spacing: 0.1em; padding: 60px; text-transform: uppercase; text-align: center; width: 100%; grid-column: 1 / -1; }
 
         /* LIGHTBOX DIALOG WINDOW PARAMETERS */
@@ -388,6 +392,23 @@
                 'unchained-england-jersey-limited-edition',
                 'unchained-france-jersey-limited-edition'
             ];
+            // SALE BADGE — 50% off jerseys. Empty this list to remove the label again.
+            const saleHandles = [
+                'unchained-jersey-mens',
+                'unchained-jersey-womans'
+            ];
+            const SALE_BADGE_LABEL = '50% OFF';
+            // SALE PRICE shown on those jerseys: 14 instead of 28. Display-only --
+            // set the real Shopify price to 14 too, or checkout will still charge 28.
+            const SALE_PRICES = {
+                'unchained-jersey-mens': { now: 14, was: 28 },
+                'unchained-jersey-womans': { now: 14, was: 28 }
+            };
+            // Normal, non-sale prices for the accessories.
+            const FIXED_PRICES = {
+                'rave-sunglasses': 9,
+                'fuck-house-music-hand-fan': 12
+            };
 
             const allProductHandles = [...jerseyHandles, ...bundleHandles, ...accessoryHandles];
 
@@ -406,6 +427,17 @@
                         maximumFractionDigits: 2
                     }).format(numericAmount);
                 } catch (error) { return `$ ${Number(amount).toFixed(2)}`; }
+            }
+
+            // Price markup: sale price with the original crossed out, a fixed normal
+            // price for the accessories, or the Shopify price as-is.
+            window.priceMarkup = function(product, amount, currencyCode) {
+                const code = currencyCode || 'USD';
+                const sale = product && SALE_PRICES[product.handle];
+                if (sale) return `<s class="price-was">${window.formatShopifyPrice(sale.was, code)}</s> ${window.formatShopifyPrice(sale.now, code)}`;
+                const fixed = product && FIXED_PRICES[product.handle];
+                if (fixed !== undefined) return window.formatShopifyPrice(fixed, code);
+                return window.formatShopifyPrice(amount, code);
             }
 
             async function queryShopify(query, variables = {}) {
@@ -572,7 +604,7 @@
                         variant.selectedOptions.every(opt => selectedOptions[opt.name] === opt.value)
                     );
                     if (matchedVariant) {
-                        document.getElementById('modal-p-price').textContent = window.formatShopifyPrice(matchedVariant.priceV2.amount, matchedVariant.priceV2.currencyCode);
+                        document.getElementById('modal-p-price').innerHTML = window.priceMarkup(product, matchedVariant.priceV2.amount, matchedVariant.priceV2.currencyCode);
                         addBtn.disabled = !matchedVariant.availableForSale;
                         addBtn.textContent = matchedVariant.availableForSale ? 'Add To Bag' : 'Sold Out';
                         addBtn.onclick = async () => {
@@ -624,10 +656,14 @@
                 const secondaryImgUrl = shopifyImgSize(imgNodes[1]?.url, 800) || primaryImgUrl;
 
                 const firstVariant = product.variants?.nodes?.[0];
-                const priceText = firstVariant?.priceV2 ? window.formatShopifyPrice(firstVariant.priceV2.amount, firstVariant.priceV2.currencyCode) : 'N/A';
+                const priceText = firstVariant?.priceV2 ? window.priceMarkup(product, firstVariant.priceV2.amount, firstVariant.priceV2.currencyCode) : 'N/A';
 
                 let badgeText = '';
-                if (preOrderHandles.includes(product.handle)) {
+                let badgeExtraClass = '';
+                if (saleHandles.includes(product.handle)) {
+                    badgeText = SALE_BADGE_LABEL;
+                    badgeExtraClass = ' pcard-badge-sale';
+                } else if (preOrderHandles.includes(product.handle)) {
                     badgeText = 'PRE ORDER';
                 } else if (worldCupHandles.includes(product.handle)) {
                     badgeText = 'LIMITED';
@@ -638,7 +674,7 @@
                 }
 
                 let badgeHtml = '';
-                if (badgeText) { badgeHtml = `<div class="pcard-badge">${badgeText}</div>`; }
+                if (badgeText) { badgeHtml = `<div class="pcard-badge${badgeExtraClass}">${badgeText}</div>`; }
 
                 card.innerHTML = `
                     ${badgeHtml}
@@ -693,9 +729,15 @@
 
                     function fillGrid(grid, handles) {
                         const matched = handles.map(h => byHandle[h]).filter(Boolean);
+                        const section = grid.closest('section');
                         if (matched.length) {
                             grid.innerHTML = '';
                             matched.forEach(p => grid.appendChild(createCard(p)));
+                            if (section) section.style.display = '';
+                        } else if (section) {
+                            // No products in this category -> hide the whole section.
+                            grid.innerHTML = '';
+                            section.style.display = 'none';
                         } else {
                             grid.innerHTML = '<div class="merch-loading">No products found.</div>';
                         }
