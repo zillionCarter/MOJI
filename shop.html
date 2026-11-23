@@ -734,6 +734,7 @@
                             grid.innerHTML = '';
                             matched.forEach(p => grid.appendChild(createCard(p)));
                             if (section) section.style.display = '';
+                            return true;
                         } else if (section) {
                             // No products in this category -> hide the whole section.
                             grid.innerHTML = '';
@@ -741,11 +742,18 @@
                         } else {
                             grid.innerHTML = '<div class="merch-loading">No products found.</div>';
                         }
+                        return false;
                     }
 
-                    fillGrid(jerseyGrid, jerseyHandles);
-                    fillGrid(bundleGrid, bundleHandles);
-                    fillGrid(accessoryGrid, accessoryHandles);
+                    // Only list the categories that actually have products in the page heading.
+                    const visibleCategories = [
+                        ['Jerseys', fillGrid(jerseyGrid, jerseyHandles)],
+                        ['Accessories', fillGrid(accessoryGrid, accessoryHandles)],
+                        ['Bundles', fillGrid(bundleGrid, bundleHandles)],
+                    ].filter(([, hasProducts]) => hasProducts).map(([label]) => label);
+
+                    const pageTitle = document.querySelector('.shop-page-header h2');
+                    if (pageTitle && visibleCategories.length) pageTitle.textContent = visibleCategories.join(', ');
 
                 } catch (error) {
                     [jerseyGrid, bundleGrid, accessoryGrid].forEach(g => {
