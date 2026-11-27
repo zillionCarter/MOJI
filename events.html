@@ -379,6 +379,13 @@
             color: #e6e6e6;
         }
 
+        .bf-promo-ref {
+            margin-left: 0.1em;
+            font-size: 0.5em;
+            vertical-align: super;
+            color: #ff8a82;
+        }
+
         .bf-promo-timer-block {
             display: flex;
             flex-direction: column;
@@ -438,6 +445,35 @@
             font-size: clamp(0.68rem, 0.6rem + 0.2vw, 0.82rem);
             letter-spacing: 0.06em;
             color: #ff8a82;
+        }
+
+        /* BF25 is typed into the Megatix checkout by the customer. */
+        .bf-promo-code {
+            margin: 0;
+            font-size: clamp(0.66rem, 0.58rem + 0.22vw, 0.8rem);
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #d4d4d4;
+        }
+
+        .bf-promo-code-value {
+            display: inline-block;
+            margin-left: 0.15em;
+            padding: 0.15em 0.45em;
+            border: 1px dashed rgba(255, 59, 48, 0.65);
+            border-radius: 4px;
+            font-weight: 900;
+            letter-spacing: 0.18em;
+            color: var(--bf-red);
+        }
+
+        .bf-promo-terms {
+            margin: 0;
+            font-size: clamp(0.56rem, 0.52rem + 0.12vw, 0.68rem);
+            line-height: 1.4;
+            letter-spacing: 0.04em;
+            color: #8a8a8a;
         }
 
         .bf-promo-cta {
@@ -525,7 +561,7 @@
                 <p class="bf-promo-eyebrow"><span class="bf-promo-dot" aria-hidden="true"></span> Black Friday</p>
                 <h2 class="bf-promo-title" id="bf-promo-title">
                     <span class="bf-promo-percent">25% off</span>
-                    <span class="bf-promo-what">Unchained tickets</span>
+                    <span class="bf-promo-what">All tickets<sup class="bf-promo-ref">*</sup></span>
                 </h2>
             </div>
             <div class="bf-promo-timer-block">
@@ -537,7 +573,9 @@
                     <div class="bf-unit"><span class="bf-num" data-bf="seconds">00</span><span class="bf-lbl">Sec</span></div>
                 </div>
                 <p class="bf-promo-deadline">Ends Monday 11:59pm Bali time</p>
+                <p class="bf-promo-code">Use code <span class="bf-promo-code-value">BF25</span> at checkout</p>
                 <a class="bf-promo-cta" href="#upcoming-events">Get tickets <i class="fas fa-arrow-down" aria-hidden="true"></i></a>
+                <p class="bf-promo-terms">*Excludes Sofa &amp; Table Bookings.</p>
             </div>
         </div>
     </section>
