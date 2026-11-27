@@ -257,6 +257,241 @@
                 margin: 0 !important;
             }
         }
+
+        /* ============================================================
+           BLACK FRIDAY PROMO BANNER
+           Full-width feature band above the upcoming events grid.
+           Fluid type and padding scale from 320px phones to ultrawide
+           desktops; two columns from 900px up, stacked below that.
+           ============================================================ */
+        .bf-promo {
+            --bf-red: #ff3b30; /* same red as the site's form-error accent */
+            padding-top: calc(100px + clamp(1rem, 2vw, 2rem));
+            padding-bottom: 0;
+        }
+
+        /* First events section: the fixed header offset moves here while the
+           banner is present, so the grid sits directly under the banner. */
+        .events-main {
+            margin-top: 100px;
+        }
+
+        .bf-promo + .events-main {
+            margin-top: 0;
+            padding-top: var(--space-l);
+        }
+
+        .bf-promo-inner {
+            position: relative;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: clamp(24px, 4vw, 64px);
+            width: 100%;
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: clamp(24px, 3.4vw, 56px) clamp(20px, 3.6vw, 64px);
+            border: 1px solid #2a2a2a;
+            border-radius: clamp(14px, 1.6vw, 24px);
+            background:
+                radial-gradient(75% 130% at 0% 100%, rgba(255, 59, 48, 0.16) 0%, rgba(255, 59, 48, 0) 60%),
+                radial-gradient(120% 160% at 100% 0%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 55%),
+                linear-gradient(135deg, #171717 0%, #0b0b0b 48%, #040404 100%);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+            overflow: hidden;
+        }
+
+        /* Faint diagonal texture + hairline highlight along the top edge */
+        .bf-promo-inner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 14px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bf-promo-inner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .bf-promo-copy,
+        .bf-promo-timer-block {
+            position: relative;
+            z-index: 1;
+        }
+
+        .bf-promo-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6em;
+            margin: 0 0 clamp(10px, 1.2vw, 18px);
+            font-size: clamp(0.6rem, 0.52rem + 0.3vw, 0.8rem);
+            font-weight: 800;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: #c4c4c4;
+        }
+
+        .bf-promo-dot {
+            width: 0.5em;
+            height: 0.5em;
+            border-radius: 50%;
+            background: var(--bf-red);
+            box-shadow: 0 0 10px rgba(255, 59, 48, 0.9);
+            animation: bf-pulse 2s ease-out infinite;
+        }
+
+        @keyframes bf-pulse {
+            0% { box-shadow: 0 0 10px rgba(255, 59, 48, 0.9), 0 0 0 0 rgba(255, 59, 48, 0.6); }
+            70% { box-shadow: 0 0 10px rgba(255, 59, 48, 0.9), 0 0 0 9px rgba(255, 59, 48, 0); }
+            100% { box-shadow: 0 0 10px rgba(255, 59, 48, 0.9), 0 0 0 0 rgba(255, 59, 48, 0); }
+        }
+
+        .bf-promo-title {
+            margin: 0;
+            color: #fff;
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 0.94;
+        }
+
+        .bf-promo-percent {
+            display: block;
+            font-size: clamp(2.6rem, 1.3rem + 6vw, 6rem);
+            letter-spacing: -0.02em;
+            color: var(--bf-red);
+        }
+
+        .bf-promo-what {
+            display: block;
+            margin-top: clamp(4px, 0.8vw, 12px);
+            font-size: clamp(1.05rem, 0.75rem + 2.1vw, 2.6rem);
+            letter-spacing: 0.02em;
+            color: #e6e6e6;
+        }
+
+        .bf-promo-timer-block {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: clamp(10px, 1.1vw, 16px);
+        }
+
+        .bf-promo-timer-label {
+            margin: 0;
+            font-size: clamp(0.6rem, 0.52rem + 0.25vw, 0.78rem);
+            font-weight: 800;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: #8f8f8f;
+        }
+
+        .bf-promo-timer {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(0, auto);
+            gap: clamp(6px, 1.4vw, 12px);
+        }
+
+        .bf-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: clamp(52px, 7.2vw, 104px);
+            padding: clamp(8px, 0.9vw, 14px) clamp(6px, 0.6vw, 10px);
+            background: rgba(255, 255, 255, 0.055);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: clamp(8px, 0.8vw, 12px);
+        }
+
+        .bf-num {
+            font-size: clamp(1.5rem, 0.9rem + 2.2vw, 3rem);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: 0.02em;
+            color: #fff;
+            font-variant-numeric: tabular-nums;
+            font-feature-settings: 'tnum' 1;
+        }
+
+        .bf-lbl {
+            margin-top: clamp(4px, 0.5vw, 7px);
+            font-size: clamp(0.5rem, 0.44rem + 0.15vw, 0.62rem);
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: #8a8a8a;
+        }
+
+        .bf-promo-deadline {
+            margin: 0;
+            font-size: clamp(0.68rem, 0.6rem + 0.2vw, 0.82rem);
+            letter-spacing: 0.06em;
+            color: #ff8a82;
+        }
+
+        .bf-promo-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65em;
+            margin-top: clamp(2px, 0.6vw, 8px);
+            padding: clamp(11px, 1vw, 15px) clamp(20px, 2vw, 30px);
+            background: var(--bf-red);
+            border: 1px solid var(--bf-red);
+            border-radius: 999px;
+            color: #000; /* black on red keeps the button text at ~5.9:1 contrast */
+            font-size: clamp(0.66rem, 0.58rem + 0.22vw, 0.8rem);
+            font-weight: 900;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            line-height: 1;
+            transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+        }
+
+        .bf-promo-cta:hover {
+            background: transparent;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 26px rgba(255, 59, 48, 0.35);
+        }
+
+        .bf-promo-cta:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 3px;
+        }
+
+        #upcoming-events {
+            scroll-margin-top: 90px;
+        }
+
+        @media (max-width: 900px) {
+            .bf-promo-inner {
+                grid-template-columns: minmax(0, 1fr);
+                gap: clamp(18px, 4vw, 28px);
+            }
+        }
+
+        @media (max-width: 380px) {
+            .bf-promo-inner {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .bf-promo-dot { animation: none; }
+            .bf-promo-cta:hover { transform: none; }
+        }
     </style>
 </head>
 <body>
@@ -284,7 +519,30 @@
         </div>
     </nav>
 
-    <section style="margin-top: 100px; padding-top: 50px;">
+    <section class="bf-promo" id="bf-promo" aria-labelledby="bf-promo-title">
+        <div class="bf-promo-inner">
+            <div class="bf-promo-copy">
+                <p class="bf-promo-eyebrow"><span class="bf-promo-dot" aria-hidden="true"></span> Black Friday</p>
+                <h2 class="bf-promo-title" id="bf-promo-title">
+                    <span class="bf-promo-percent">25% off</span>
+                    <span class="bf-promo-what">Unchained tickets</span>
+                </h2>
+            </div>
+            <div class="bf-promo-timer-block">
+                <p class="bf-promo-timer-label">Offer ends in</p>
+                <div class="bf-promo-timer" role="timer" aria-label="Time left on the Black Friday offer">
+                    <div class="bf-unit"><span class="bf-num" data-bf="days">00</span><span class="bf-lbl">Days</span></div>
+                    <div class="bf-unit"><span class="bf-num" data-bf="hours">00</span><span class="bf-lbl">Hrs</span></div>
+                    <div class="bf-unit"><span class="bf-num" data-bf="minutes">00</span><span class="bf-lbl">Min</span></div>
+                    <div class="bf-unit"><span class="bf-num" data-bf="seconds">00</span><span class="bf-lbl">Sec</span></div>
+                </div>
+                <p class="bf-promo-deadline">Ends Monday 11:59pm Bali time</p>
+                <a class="bf-promo-cta" href="#upcoming-events">Get tickets <i class="fas fa-arrow-down" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="events-main">
         <h1 class="sr-only">Terminus Bali — Unchained's Weekly Hard Techno Party</h1>
         <h2 class="section-title">Upcoming Events</h2>
         <div class="events-grid" id="upcoming-events">
@@ -464,6 +722,49 @@
 
             cartCheckoutTrigger.addEventListener('click', () => { if (checkoutUrl) window.location.href = checkoutUrl; });
             await syncCartData();
+        })();
+    </script>
+
+    <script>
+        // Black Friday countdown — ends Monday 30 November 2026, 23:59:59 Bali time (WITA, UTC+8).
+        // Fixed offset because Bali has no daylight saving, so the deadline is the same
+        // instant for every visitor regardless of their own timezone.
+        (function () {
+            var banner = document.getElementById('bf-promo');
+            if (!banner) return;
+
+            var DEADLINE = new Date('2026-11-30T23:59:59+08:00').getTime();
+            var fields = {
+                days: banner.querySelector('[data-bf="days"]'),
+                hours: banner.querySelector('[data-bf="hours"]'),
+                minutes: banner.querySelector('[data-bf="minutes"]'),
+                seconds: banner.querySelector('[data-bf="seconds"]')
+            };
+            var timer = null;
+
+            function pad(value) {
+                return value < 10 ? '0' + value : String(value);
+            }
+
+            function tick() {
+                var remaining = DEADLINE - Date.now();
+
+                if (remaining <= 0) {
+                    // Drop the banner so the events section falls back to its own header offset.
+                    banner.remove();
+                    if (timer) clearInterval(timer);
+                    return;
+                }
+
+                var total = Math.floor(remaining / 1000);
+                fields.days.textContent = pad(Math.floor(total / 86400));
+                fields.hours.textContent = pad(Math.floor(total % 86400 / 3600));
+                fields.minutes.textContent = pad(Math.floor(total % 3600 / 60));
+                fields.seconds.textContent = pad(total % 60);
+            }
+
+            tick();
+            if (banner.isConnected) timer = setInterval(tick, 1000);
         })();
     </script>
 </body>
